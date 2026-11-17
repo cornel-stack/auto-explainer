@@ -1,0 +1,43 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Node deps
+        run: npm ci
+
+      - name: Install Python deps
+        run: pip install -r pipeline/requirements.txt
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Validate every video script
+        run: |
+          for d in videos/*/; do
+            if [ -f "$d/script.json" ]; then
+              python pipeline/validate.py "$d"
+            fi
+          done

@@ -1,0 +1,110 @@
+name: render
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Video slug under videos/ to render'
+        required: true
+        default: 'how-a-car-engine-works'
+  push:
+    branches: [main]
+    paths:
+      - 'videos/**/script.json'
+      - 'src/**'
+      - 'pipeline/**'
+      - 'remotion.config.ts'
+      - '.github/workflows/render.yml'
+
+concurrency:
+  group: render-${{ github.event.inputs.slug || 'how-a-car-engine-works' }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SLUG: ${{ github.event.inputs.slug || 'how-a-car-engine-works' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Node deps
+        run: npm ci
+
+      - name: Install Python deps
+        run: pip install -r pipeline/requirements.txt
+
+      - name: Install Chrome Headless Shell + system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
+            libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 \
+            libxrandr2 libgbm1 libpango-1.0-0 libcairo2 || true
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
+          npx remotion browser ensure
+
+      - name: Validate
+        run: python pipeline/validate.py "videos/$SLUG"
+
+      - name: Narrate (Edge TTS Brian) + timing
+        run: python pipeline/tts.py "videos/$SLUG"
+
+      - name: Render 1080p (silent)
+        run: |
+          mkdir -p out
+          npx remotion render "$SLUG" "out/$SLUG.silent.mp4" \
+            --props="./videos/$SLUG/.cache/props.json" \
+            --concurrency=4 --gl=angle --log=verbose
+
+      - name: Mux narration + faststart
+        run: |
+          ffmpeg -y -i "out/$SLUG.silent.mp4" -i "videos/$SLUG/.cache/narration.wav" \
+            -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k \
+            -movflags +faststart -shortest "out/$SLUG.mp4"
+          cp "videos/$SLUG/.cache/captions.srt" "out/$SLUG.srt"
+          ls -lh out/
+
+      - name: Probe final (sanity)
+        run: |
+          ffprobe -v error -show_entries \
+            stream=codec_name,width,height,r_frame_rate,sample_rate \
+            -of default=noprint_wrappers=1 "out/$SLUG.mp4"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.SLUG }}
+          path: |
+            out/${{ env.SLUG }}.mp4
+            out/${{ env.SLUG }}.srt
+          retention-days: 30
+
+      - name: Publish GitHub Release (public video link)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v-${{ env.SLUG }}-${{ github.run_number }}
+          name: ${{ env.SLUG }} (build ${{ github.run_number }})
+          body: |
+            Rendered in GitHub Actions from `videos/${{ env.SLUG }}/script.json`.
+            Narration: Edge TTS `en-US-BrianNeural`. 1920×1080, H.264, −14 LUFS.
+
+            **`${{ env.SLUG }}.mp4`** is the video. `.srt` is the caption track.
+            Content is All Rights Reserved — see CONTENT-LICENSE.md.
+          files: |
+            out/${{ env.SLUG }}.mp4
+            out/${{ env.SLUG }}.srt
