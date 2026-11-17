@@ -1,0 +1,32 @@
+{
+  "name": "auto-explainer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Code-rendered automotive explainer channel. One script.json per video, narrated by Edge TTS Brian, rendered in GitHub Actions.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20 <=22"
+  },
+  "scripts": {
+    "preview": "remotion studio",
+    "studio": "remotion studio",
+    "render": "remotion render",
+    "still": "remotion still",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.544",
+    "@remotion/fonts": "4.0.544",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.544",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.9",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "typescript": "5.5.4"
+  }
+}

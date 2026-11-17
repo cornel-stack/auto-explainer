@@ -1,0 +1,25 @@
+# Render + pipeline caches (Technical Spec §12)
+videos/*/.cache/
+cad/.out/
+blender/.out/
+*.mp4
+*.wav
+*.mp3
+*.blend1
+
+# Node
+node_modules/
+.remotion/
+out/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+*.log
+.vscode/
+.idea/
