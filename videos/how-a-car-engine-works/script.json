@@ -1,0 +1,139 @@
+{
+  "slug": "how-a-car-engine-works",
+  "series": "how-it-works",
+  "title": "How a Car Engine Works",
+  "alt_titles": [
+    "How a Car Engine Works, One Stroke at a Time",
+    "How a Four-Stroke Engine Actually Works"
+  ],
+  "keyword": "how a car engine works",
+  "target_minutes": 6,
+  "tier": 1,
+  "thumbnail": {
+    "mode": "hero",
+    "headline": "HOW A CAR ENGINE WORKS",
+    "accent": "bar"
+  },
+  "sources": [
+    {
+      "id": "britannica-4stroke",
+      "title": "Encyclopaedia Britannica — Gasoline engine: the four-stroke cycle",
+      "url": "https://www.britannica.com/technology/gasoline-engine"
+    },
+    {
+      "id": "doe-engine",
+      "title": "U.S. Department of Energy — How internal combustion engines work",
+      "url": "https://www.energy.gov/eere/vehicles/articles/how-do-gasoline-cars-work"
+    }
+  ],
+  "lexicon": {},
+  "intro": {
+    "narration": "Every time you press the accelerator, thousands of tiny explosions push your car forward. A petrol engine turns fuel and air into spinning motion, and it does it with four simple strokes, repeated over and over. Here is how a four-stroke engine actually works, one stroke at a time."
+  },
+  "scenes": [
+    {
+      "id": "overview",
+      "type": "mechanism",
+      "section": "The four-stroke cycle",
+      "narration": "An engine's job is to turn burning fuel into a turning shaft. It does that inside these cylinders. A piston slides up and down in each one, and a connecting rod links it to the crankshaft at the bottom. Every time a piston is pushed down, it spins the crankshaft, and that rotation is what eventually reaches the wheels. The trick is a repeating sequence of four strokes: intake, compression, power, and exhaust. This engine has four cylinders, and they take turns firing, so that while one is being pushed down on its power stroke, the others are busy drawing in, squeezing, or clearing out gas. Let's slow it right down and follow a single cylinder.",
+      "visual": {
+        "component": "Engine",
+        "props": {"layout": "I4", "rpm": 48, "strokesColored": true}
+      },
+      "cues": [
+        {"on": "connecting rod", "do": "callout", "args": {"anchor": "rod", "text": "Connecting rod", "side": "right"}},
+        {"on": "four cylinders", "do": "callout", "args": {"anchor": "crank", "text": "Crankshaft", "side": "bottom", "accent": "bar"}}
+      ]
+    },
+    {
+      "id": "intake",
+      "type": "mechanism",
+      "section": "1 · Intake",
+      "narration": "The cycle begins with the intake stroke. The piston moves down inside the cylinder, and as it drops it creates a partial vacuum, like pulling back on a syringe. At the very same moment, the intake valve opens at the top of the chamber. Air, mixed with a fine mist of fuel, rushes in through the open valve to fill the space the piston has left behind. By the time the piston reaches the bottom, the cylinder is full of a fresh, combustible mixture of fuel and air. Then the intake valve closes again, sealing everything inside, and that single cylinder is ready for the next stroke.",
+      "visual": {
+        "component": "Engine",
+        "props": {"layout": "I4", "rpm": 34, "strokesColored": true, "isolate": "intake", "focusCylinder": 0}
+      },
+      "cues": [
+        {"on": "piston moves down", "do": "callout", "args": {"anchor": "piston", "text": "Piston moves down", "side": "right"}},
+        {"on": "intake valve opens", "do": "callout", "args": {"anchor": "intakeValve", "text": "Intake valve opens", "side": "left", "accent": "fuel"}}
+      ]
+    },
+    {
+      "id": "compression",
+      "type": "mechanism",
+      "section": "2 · Compression",
+      "narration": "Next comes the compression stroke. With both valves now closed, the cylinder is sealed tight. The crankshaft keeps turning and drives the piston back up, and because the trapped gas has nowhere to escape, it gets squeezed into a tiny space near the top. Compressing the mixture like this packs the fuel and air tightly together and makes them far more ready to burn. The harder the squeeze, the more powerful the explosion that follows will be. By the end of this stroke the piston is right near the top, and a small, highly compressed pocket of fuel and air is sitting there, waiting for a spark.",
+      "visual": {
+        "component": "Engine",
+        "props": {"layout": "I4", "rpm": 34, "strokesColored": true, "focusCylinder": 0}
+      },
+      "cues": [
+        {"on": "both valves now closed", "do": "callout", "args": {"anchor": "chamber", "text": "Both valves closed", "side": "right"}},
+        {"on": "near the top", "do": "callout", "args": {"anchor": "piston", "text": "Mixture squeezed tight", "side": "right", "accent": "oil"}}
+      ]
+    },
+    {
+      "id": "power",
+      "type": "mechanism",
+      "section": "3 · Power",
+      "narration": "Now the moment everything has been building towards: the power stroke. With the mixture fully compressed, the spark plug fires, throwing a spark across the gap. The fuel and air ignite and burn almost instantly, and the expanding hot gas slams the piston down with real force. This is the only stroke that actually produces power; the other three are just preparation for it. That violent push travels down the connecting rod and turns the crankshaft, and that is exactly where your car's power comes from. Multiply this by thousands of times a minute, across four cylinders, and you have more than enough force to move a car.",
+      "visual": {
+        "component": "Engine",
+        "props": {"layout": "I4", "rpm": 34, "strokesColored": true, "isolate": "ignition", "focusCylinder": 0}
+      },
+      "cues": [
+        {"on": "spark plug fires", "do": "callout", "args": {"anchor": "sparkPlug", "text": "Spark plug fires", "side": "top", "accent": "electric"}},
+        {"on": "slams the piston down", "do": "callout", "args": {"anchor": "piston", "text": "Burning gas drives the piston", "side": "right", "accent": "fault"}}
+      ]
+    },
+    {
+      "id": "exhaust",
+      "type": "mechanism",
+      "section": "4 · Exhaust",
+      "narration": "Finally, the exhaust stroke clears away the mess. The burnt gas left over from combustion is hot, spent, and useless, so it has to go somewhere. The exhaust valve opens at the top of the cylinder, and the piston rises once more, pushing the leftover gas out through the open valve and into the exhaust pipe. Once the cylinder is empty again, the exhaust valve closes, the intake valve opens, and the whole four-stroke cycle begins all over from the start. Intake, compression, power, exhaust: that same loop runs thousands of times every single minute while the engine is running.",
+      "visual": {
+        "component": "Engine",
+        "props": {"layout": "I4", "rpm": 34, "strokesColored": true, "isolate": "exhaust", "focusCylinder": 0}
+      },
+      "cues": [
+        {"on": "exhaust valve opens", "do": "callout", "args": {"anchor": "exhaustValve", "text": "Exhaust valve opens", "side": "right", "accent": "exhaust"}},
+        {"on": "piston rises once more", "do": "callout", "args": {"anchor": "piston", "text": "Piston pushes gas out", "side": "left"}}
+      ]
+    },
+    {
+      "id": "valvetrain",
+      "type": "mechanism",
+      "section": "The valvetrain",
+      "source": "britannica-4stroke",
+      "narration": "You might be wondering what opens and closes those valves at exactly the right instant. That job belongs to the camshaft, the spinning rod at the top with egg-shaped lobes along it. As each lobe rotates around, it presses down on a valve and pushes it open; as the lobe turns away, a spring snaps the valve shut again. The camshaft is driven by the crankshaft through a belt or a chain, and it turns at exactly half the speed of the crankshaft. That ratio matters, because it takes two full turns of the crankshaft to complete one four-stroke cycle, so each valve needs to open just once in that time.",
+      "visual": {
+        "component": "Engine",
+        "props": {"layout": "I4", "rpm": 34, "isolate": "valvetrain"}
+      },
+      "cues": [
+        {"on": "the camshaft", "do": "callout", "args": {"anchor": "cam", "text": "Camshaft turns the lobes", "side": "top", "accent": "bar"}},
+        {"on": "half the speed", "do": "callout", "args": {"anchor": "intakeValve", "text": "Half crankshaft speed", "side": "left"}}
+      ]
+    },
+    {
+      "id": "recap",
+      "type": "mechanism",
+      "section": "All together now",
+      "source": "doe-engine",
+      "narration": "Put it all together and speed it up, and this is a running engine. Each cylinder is at a different point in the cycle, so there is always one of them on its power stroke, pushing the crankshaft round. In this four-cylinder engine they fire in the order one, three, four, two, which spreads the pushes out evenly for smooth, continuous power. Intake, compression, power, exhaust, over and over, thousands of times a minute, quietly turning a stream of controlled explosions into the smooth rotation that carries you down the road.",
+      "visual": {
+        "component": "Engine",
+        "props": {"layout": "I4", "rpm": 96, "strokesColored": true}
+      },
+      "cues": [
+        {"on": "power stroke", "do": "callout", "args": {"anchor": "piston", "text": "Always one cylinder firing", "side": "right", "accent": "fault"}},
+        {"on": "one, three, four, two", "do": "callout", "args": {"anchor": "crank", "text": "Firing order 1-3-4-2", "side": "bottom", "accent": "bar"}}
+      ]
+    }
+  ],
+  "outro": {
+    "narration": "That is the four-stroke engine, the beating heart of almost every petrol car on the road. Next, we will follow that same air and fuel a little further upstream, and see how a turbocharger forces even more of it into the cylinders.",
+    "next_slug": "how-a-turbocharger-works"
+  }
+}
