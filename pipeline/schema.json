@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://auto-explainer/script.schema.json",
+  "title": "Auto Explainer script.json",
+  "type": "object",
+  "required": [
+    "slug",
+    "series",
+    "title",
+    "alt_titles",
+    "keyword",
+    "target_minutes",
+    "tier",
+    "thumbnail",
+    "sources",
+    "lexicon",
+    "intro",
+    "scenes",
+    "outro"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "slug": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "series": {
+      "enum": [
+        "every-x",
+        "how-it-works",
+        "versus",
+        "why-does-my-car",
+        "what-happens-if"
+      ]
+    },
+    "title": {"type": "string", "minLength": 3},
+    "alt_titles": {"type": "array", "items": {"type": "string"}},
+    "keyword": {"type": "string"},
+    "target_minutes": {"type": "number", "minimum": 1, "maximum": 30},
+    "tier": {"enum": [1, 2, 3]},
+    "thumbnail": {
+      "type": "object",
+      "required": ["mode", "headline", "accent"],
+      "properties": {
+        "mode": {"enum": ["grid", "hero"]},
+        "headline": {"type": "string"},
+        "accent": {"enum": ["bar", "fault", "ok"]}
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "url"],
+        "properties": {
+          "id": {"type": "string"},
+          "title": {"type": "string"},
+          "url": {"type": "string", "format": "uri"}
+        }
+      }
+    },
+    "lexicon": {"type": "object", "additionalProperties": {"type": "string"}},
+    "intro": {
+      "type": "object",
+      "required": ["narration"],
+      "properties": {"narration": {"type": "string"}}
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "narration", "visual"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "type": {
+            "enum": ["title", "item", "mechanism", "compare", "cause", "beat"]
+          },
+          "section": {"type": "string"},
+          "title": {"type": "string"},
+          "narration": {"type": "string"},
+          "source": {"type": "string"},
+          "isolate": {"type": "string"},
+          "verdict": {"type": "string"},
+          "visual": {
+            "type": "object",
+            "required": ["component", "props"],
+            "properties": {
+              "component": {"type": "string"},
+              "props": {"type": "object"}
+            }
+          },
+          "specs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label", "value"],
+              "properties": {
+                "label": {"type": "string"},
+                "value": {"type": "string"},
+                "emphasis": {"enum": ["fault", "ok", "bar"]}
+              }
+            }
+          },
+          "cues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["on", "do"],
+              "properties": {
+                "on": {"type": "string"},
+                "do": {"type": "string"},
+                "args": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "outro": {
+      "type": "object",
+      "required": ["narration"],
+      "properties": {
+        "narration": {"type": "string"},
+        "next_slug": {"type": "string"}
+      }
+    }
+  }
+}
