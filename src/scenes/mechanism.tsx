@@ -5,7 +5,8 @@ import {SectionBar} from '../chrome/SectionBar';
 import {SourceCard} from '../chrome/SourceCard';
 import {Callout} from '../chrome/Callout';
 import {ProgressRail} from '../chrome/ProgressRail';
-import {ANCHORS, COMPONENTS} from '../components/registry';
+import {ANCHORS, COMPONENTS, THREE_D} from '../components/registry';
+import {cameraFor, partWorld, projectToScreen, type CameraPreset} from '../components/Engine3D';
 import {FALLBACK_CUE_FRAME, findCueFrame} from '../lib/timing';
 import type {Scene, Source, TimedBeat} from '../lib/schema';
 
@@ -19,15 +20,27 @@ export const MechanismScene: React.FC<{
   totalFrames: number;
 }> = ({scene, beat, source, globalStart, totalFrames}) => {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
+  const {fps, width, height} = useVideoConfig();
 
   const Visual = COMPONENTS[scene.visual.component];
+  const is3D = THREE_D.has(scene.visual.component);
   const focusCyl =
     typeof scene.visual.props.focusCylinder === 'number'
       ? (scene.visual.props.focusCylinder as number)
       : 0;
   const anchorFn = ANCHORS[scene.visual.component];
   const anchors = anchorFn ? anchorFn(focusCyl) : {};
+
+  // For 3D, project each part's world position through the beat's camera at the
+  // current frame so leader lines track the part as the camera drifts.
+  const beatFrames = beat?.frames ?? 300;
+  const t01 = Math.min(1, Math.max(0, frame / beatFrames));
+  const preset = (scene.visual.props.camera as CameraPreset) ?? 'wide';
+  const cam = cameraFor(preset, t01, focusCyl);
+  const resolveAt = (anchorName: string): {x: number; y: number} => {
+    if (is3D) return projectToScreen(partWorld(anchorName, focusCyl), cam, width, height);
+    return anchors[anchorName] ?? {x: 960, y: 420};
+  };
 
   // Resolve callout cues to frames; keep at most two visible at once (Spec §6).
   const callouts = (scene.cues ?? [])
@@ -42,7 +55,7 @@ export const MechanismScene: React.FC<{
         text: String(a.text ?? ''),
         side: (a.side as 'left' | 'right' | 'top' | 'bottom') ?? 'right',
         accent: (a.accent as keyof typeof COLORS) ?? 'ink',
-        at: anchors[anchorName] ?? {x: 960, y: 420},
+        at: resolveAt(anchorName),
       };
     })
     .sort((x, y) => x.appearAt - y.appearAt);
@@ -54,7 +67,7 @@ export const MechanismScene: React.FC<{
 
   return (
     <AbsoluteFill style={{background: COLORS.bg}}>
-      {Visual ? <Visual {...scene.visual.props} /> : null}
+      {Visual ? <Visual {...scene.visual.props} beatFrames={beatFrames} /> : null}
 
       {scene.section ? <SectionBar label={scene.section} /> : null}
 

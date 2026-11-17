@@ -70,7 +70,7 @@ jobs:
           mkdir -p out
           npx remotion render "$SLUG" "out/$SLUG.silent.mp4" \
             --props="./videos/$SLUG/.cache/props.json" \
-            --concurrency=4 --gl=angle --log=verbose
+            --concurrency=4 --gl=swangle --log=verbose
 
       - name: Mux narration + faststart
         run: |

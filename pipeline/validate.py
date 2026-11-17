@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 # Mirrors src/components/registry.ts — update both together.
-KNOWN_COMPONENTS = {"Engine"}
+KNOWN_COMPONENTS = {"Engine", "Engine3D"}
 
 WORDS_PER_MIN = 150
 MIN_WORDS = {"mechanism": 90, "beat": 90, "item": 35}
