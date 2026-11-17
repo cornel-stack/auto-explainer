@@ -6,6 +6,5 @@ Config.setConcurrency(4);
 Config.setChromiumOpenGlRenderer('angle');
 Config.setCodec('h264');
 Config.setPixelFormat('yuv420p');
-Config.setProResProfile('standard');
 Config.setCrf(18);
 Config.overrideWebpackConfig((config) => config);
