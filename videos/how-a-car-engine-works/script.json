@@ -52,7 +52,7 @@
       "narration": "The cycle begins with the intake stroke. The piston moves down inside the cylinder, and as it drops it creates a partial vacuum, like pulling back on a syringe. At the very same moment, the intake valve opens at the top of the chamber. Air, mixed with a fine mist of fuel, rushes in through the open valve to fill the space the piston has left behind. By the time the piston reaches the bottom, the cylinder is full of a fresh, combustible mixture of fuel and air. Then the intake valve closes again, sealing everything inside, and that single cylinder is ready for the next stroke.",
       "visual": {
         "component": "Engine",
-        "props": {"layout": "I4", "rpm": 34, "strokesColored": true, "isolate": "intake", "focusCylinder": 0}
+        "props": {"layout": "I4", "rpm": 30, "strokesColored": true, "focusCylinder": 0, "startDeg": 0}
       },
       "cues": [
         {"on": "piston moves down", "do": "callout", "args": {"anchor": "piston", "text": "Piston moves down", "side": "right"}},
@@ -66,7 +66,7 @@
       "narration": "Next comes the compression stroke. With both valves now closed, the cylinder is sealed tight. The crankshaft keeps turning and drives the piston back up, and because the trapped gas has nowhere to escape, it gets squeezed into a tiny space near the top. Compressing the mixture like this packs the fuel and air tightly together and makes them far more ready to burn. The harder the squeeze, the more powerful the explosion that follows will be. By the end of this stroke the piston is right near the top, and a small, highly compressed pocket of fuel and air is sitting there, waiting for a spark.",
       "visual": {
         "component": "Engine",
-        "props": {"layout": "I4", "rpm": 34, "strokesColored": true, "focusCylinder": 0}
+        "props": {"layout": "I4", "rpm": 30, "strokesColored": true, "focusCylinder": 0, "startDeg": 180}
       },
       "cues": [
         {"on": "both valves now closed", "do": "callout", "args": {"anchor": "chamber", "text": "Both valves closed", "side": "right"}},
@@ -80,7 +80,7 @@
       "narration": "Now the moment everything has been building towards: the power stroke. With the mixture fully compressed, the spark plug fires, throwing a spark across the gap. The fuel and air ignite and burn almost instantly, and the expanding hot gas slams the piston down with real force. This is the only stroke that actually produces power; the other three are just preparation for it. That violent push travels down the connecting rod and turns the crankshaft, and that is exactly where your car's power comes from. Multiply this by thousands of times a minute, across four cylinders, and you have more than enough force to move a car.",
       "visual": {
         "component": "Engine",
-        "props": {"layout": "I4", "rpm": 34, "strokesColored": true, "isolate": "ignition", "focusCylinder": 0}
+        "props": {"layout": "I4", "rpm": 30, "strokesColored": true, "focusCylinder": 0, "startDeg": 360}
       },
       "cues": [
         {"on": "spark plug fires", "do": "callout", "args": {"anchor": "sparkPlug", "text": "Spark plug fires", "side": "top", "accent": "electric"}},
@@ -94,7 +94,7 @@
       "narration": "Finally, the exhaust stroke clears away the mess. The burnt gas left over from combustion is hot, spent, and useless, so it has to go somewhere. The exhaust valve opens at the top of the cylinder, and the piston rises once more, pushing the leftover gas out through the open valve and into the exhaust pipe. Once the cylinder is empty again, the exhaust valve closes, the intake valve opens, and the whole four-stroke cycle begins all over from the start. Intake, compression, power, exhaust: that same loop runs thousands of times every single minute while the engine is running.",
       "visual": {
         "component": "Engine",
-        "props": {"layout": "I4", "rpm": 34, "strokesColored": true, "isolate": "exhaust", "focusCylinder": 0}
+        "props": {"layout": "I4", "rpm": 30, "strokesColored": true, "focusCylinder": 0, "startDeg": 540}
       },
       "cues": [
         {"on": "exhaust valve opens", "do": "callout", "args": {"anchor": "exhaustValve", "text": "Exhaust valve opens", "side": "right", "accent": "exhaust"}},
