@@ -106,8 +106,10 @@ export const drive = (
 
   const cylinders: CylinderState[] = [];
   for (let i = 0; i < CYL_COUNT; i++) {
-    const crankAngle = mod(theta, 360);
     const phi = mod(theta + PHASE[i]!, 720);
+    // Piston motion repeats every 360°; the 720° phase sets which stroke a
+    // cylinder is on. So cyl 1 & 4 move together, 2 & 3 opposite — a real I4.
+    const crankAngle = mod(phi, 360);
     const cx = cylinderX(i);
 
     const dist = slider(crankAngle);
