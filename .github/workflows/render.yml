@@ -1,5 +1,11 @@
 name: render
 
+# Full 1080p render, split across a frame-range matrix (Spec §11) so the heavy
+# Tier-2 software-GL render finishes fast and never hits the job timeout.
+#   plan  -> narrate once, compute shard ranges
+#   shard -> render a frame range in parallel (matrix)
+#   assemble -> concat shards, mux narration, publish a Release
+
 on:
   workflow_dispatch:
     inputs:
@@ -9,95 +15,146 @@ on:
         default: 'how-a-car-engine-works'
 
 concurrency:
-  group: render-${{ github.event.inputs.slug || 'how-a-car-engine-works' }}
-  cancel-in-progress: true
+  group: render-${{ github.event.inputs.slug }}
+  cancel-in-progress: false
 
 permissions:
   contents: write
 
 jobs:
-  render:
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 20
     env:
-      SLUG: ${{ github.event.inputs.slug || 'how-a-car-engine-works' }}
+      SLUG: ${{ github.event.inputs.slug }}
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      total: ${{ steps.plan.outputs.total }}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
-
-      - name: Install Node deps
-        run: npm ci
-
-      - name: Install Python deps
-        run: pip install -r pipeline/requirements.txt
-
-      - name: Install Chrome Headless Shell + system libraries
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-          sudo apt-get install -y \
-            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
-            libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 \
-            libxrandr2 libgbm1 libpango-1.0-0 libcairo2 || true
-          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
-          npx remotion browser ensure
-
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: pip install -r pipeline/requirements.txt
       - name: Validate
         run: python pipeline/validate.py "videos/$SLUG"
-
       - name: Narrate (Edge TTS Brian) + timing
         run: python pipeline/tts.py "videos/$SLUG"
+      - name: Plan shard matrix
+        id: plan
+        run: |
+          out=$(python pipeline/plan_matrix.py "videos/$SLUG")
+          echo "matrix=$(echo "$out" | jq -c .matrix)" >> "$GITHUB_OUTPUT"
+          echo "total=$(echo "$out" | jq -r .total)" >> "$GITHUB_OUTPUT"
+          echo "$out" | jq .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: render-props
+          path: |
+            videos/${{ env.SLUG }}/.cache/props.json
+            videos/${{ env.SLUG }}/.cache/timing.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: render-audio
+          path: |
+            videos/${{ env.SLUG }}/.cache/narration.wav
+            videos/${{ env.SLUG }}/.cache/captions.srt
 
-      - name: Render 1080p (silent)
+  shard:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJson(needs.plan.outputs.matrix) }}
+    env:
+      SLUG: ${{ github.event.inputs.slug }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Chrome Headless Shell + libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libdbus-1-3 libatk1.0-0 \
+            libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 \
+            libxdamage1 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 || true
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
+          npx remotion browser ensure
+      - uses: actions/download-artifact@v4
+        with:
+          name: render-props
+          path: videos/${{ env.SLUG }}/.cache
+      - name: Render frames ${{ matrix.shard.start }}-${{ matrix.shard.end }}
         run: |
           mkdir -p out
-          npx remotion render "$SLUG" "out/$SLUG.silent.mp4" \
+          npx remotion render "$SLUG" "out/shard-${{ matrix.shard.index }}.mp4" \
+            --frames=${{ matrix.shard.start }}-${{ matrix.shard.end }} \
             --props="./videos/$SLUG/.cache/props.json" \
-            --concurrency=4 --gl=swangle --log=verbose
+            --concurrency=4 --gl=swangle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shard-${{ matrix.shard.index }}
+          path: out/shard-${{ matrix.shard.index }}.mp4
 
-      - name: Mux narration + faststart
+  assemble:
+    needs: [plan, shard]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SLUG: ${{ github.event.inputs.slug }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - uses: actions/download-artifact@v4
+        with:
+          name: render-audio
+          path: audio
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: shard-*
+          path: shards
+          merge-multiple: true
+      - name: Concat shards + mux narration
         run: |
-          ffmpeg -y -i "out/$SLUG.silent.mp4" -i "videos/$SLUG/.cache/narration.wav" \
+          mkdir -p out
+          for f in $(ls shards/shard-*.mp4 | sort -V); do
+            echo "file '$PWD/$f'"
+          done > list.txt
+          cat list.txt
+          ffmpeg -y -f concat -safe 0 -i list.txt -c copy out/silent.mp4
+          ffmpeg -y -i out/silent.mp4 -i audio/narration.wav \
             -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k \
             -movflags +faststart -shortest "out/$SLUG.mp4"
-          cp "videos/$SLUG/.cache/captions.srt" "out/$SLUG.srt"
+          cp audio/captions.srt "out/$SLUG.srt"
           ls -lh out/
-
-      - name: Probe final (sanity)
+      - name: Probe final
         run: |
           ffprobe -v error -show_entries \
-            stream=codec_name,width,height,r_frame_rate,sample_rate \
+            stream=codec_name,width,height,r_frame_rate:format=duration \
             -of default=noprint_wrappers=1 "out/$SLUG.mp4"
-
-      - name: Upload workflow artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.SLUG }}
           path: |
             out/${{ env.SLUG }}.mp4
             out/${{ env.SLUG }}.srt
           retention-days: 30
-
-      - name: Publish GitHub Release (public video link)
+      - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v-${{ env.SLUG }}-${{ github.run_number }}
           name: ${{ env.SLUG }} (build ${{ github.run_number }})
           body: |
-            Rendered in GitHub Actions from `videos/${{ env.SLUG }}/script.json`.
-            Narration: Edge TTS `en-US-BrianNeural`. 1920×1080, H.264, −14 LUFS.
-
-            **`${{ env.SLUG }}.mp4`** is the video. `.srt` is the caption track.
-            Content is All Rights Reserved — see CONTENT-LICENSE.md.
+            Rendered in GitHub Actions from `videos/${{ env.SLUG }}/script.json`
+            across a frame-range matrix. Narration: Edge TTS `en-US-BrianNeural`.
+            1920×1080, H.264, −14 LUFS. Content is All Rights Reserved.
           files: |
             out/${{ env.SLUG }}.mp4
             out/${{ env.SLUG }}.srt
