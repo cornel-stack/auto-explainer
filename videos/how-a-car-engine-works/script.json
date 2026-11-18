@@ -243,7 +243,7 @@
           "args": {
             "anchor": "cam",
             "text": "Camshaft turns the lobes",
-            "side": "top",
+            "side": "right",
             "accent": "bar"
           }
         },
@@ -253,7 +253,7 @@
           "args": {
             "anchor": "intakeValve",
             "text": "Half crankshaft speed",
-            "side": "left"
+            "side": "bottom"
           }
         }
       ]
