@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, useVideoConfig} from 'remotion';
 import {COLORS, TYPE} from '../theme/tokens';
+import {useTheme} from '../theme/theme';
 import {enter} from '../theme/motion';
 
 // Opening: state the question and show the mechanism. No logo sting, no
@@ -14,6 +15,7 @@ export const Intro: React.FC<{
 }> = ({title, hook, accentWord, children}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const theme = useTheme();
   const t = enter(frame, fps);
 
   const renderTitle = () => {
@@ -32,9 +34,17 @@ export const Intro: React.FC<{
   };
 
   return (
-    <AbsoluteFill style={{background: COLORS.bg}}>
+    <AbsoluteFill
+      style={{
+        background: theme.dark
+          ? `radial-gradient(130% 110% at 72% 18%, ${theme.bgTop} 0%, ${theme.bg} 62%)`
+          : theme.bg,
+      }}
+    >
       {children ? (
-        <AbsoluteFill style={{opacity: 0.12, filter: 'saturate(0.2)'}}>
+        <AbsoluteFill
+          style={{opacity: theme.dark ? 0.22 : 0.12, filter: 'saturate(0.3)'}}
+        >
           {children}
         </AbsoluteFill>
       ) : null}
@@ -65,7 +75,7 @@ export const Intro: React.FC<{
             fontFamily: TYPE.family,
             fontSize: 92,
             fontWeight: 700,
-            color: COLORS.ink,
+            color: theme.ink,
             letterSpacing: -2,
             lineHeight: 1.05,
             opacity: t,
@@ -82,7 +92,7 @@ export const Intro: React.FC<{
               fontFamily: TYPE.family,
               fontSize: 40,
               fontWeight: 400,
-              color: COLORS.ink2,
+              color: theme.ink2,
               lineHeight: 1.4,
               opacity: enter(frame, fps, 10),
             }}

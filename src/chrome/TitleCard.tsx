@@ -1,6 +1,7 @@
 import React from 'react';
 import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {COLORS, TYPE} from '../theme/tokens';
+import {useTheme} from '../theme/theme';
 import {enter} from '../theme/motion';
 
 // Centered scene title with an optional subtitle. Title cards carry no section
@@ -12,6 +13,7 @@ export const TitleCard: React.FC<{
 }> = ({title, subtitle, accentWord}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const theme = useTheme();
   const t = enter(frame, fps);
   const bar = enter(frame, fps, 4);
 
@@ -59,7 +61,7 @@ export const TitleCard: React.FC<{
           fontFamily: TYPE.family,
           fontSize: TYPE.sceneTitle.size,
           fontWeight: TYPE.sceneTitle.weight,
-          color: COLORS.ink,
+          color: theme.ink,
           letterSpacing: -1,
           lineHeight: 1.1,
           opacity: t,
@@ -75,7 +77,7 @@ export const TitleCard: React.FC<{
             fontFamily: TYPE.family,
             fontSize: TYPE.callout.size,
             fontWeight: 400,
-            color: COLORS.ink2,
+            color: theme.ink2,
             maxWidth: 1100,
             lineHeight: 1.35,
             opacity: enter(frame, fps, 8),

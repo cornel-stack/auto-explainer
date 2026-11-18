@@ -3,6 +3,7 @@ import {AbsoluteFill, useCurrentFrame, useVideoConfig} from 'remotion';
 import {ThreeCanvas} from '@remotion/three';
 import {useThree} from '@react-three/fiber';
 import * as THREE from 'three';
+import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {COLORS, STROKE_COLORS} from '../../theme/tokens';
 import {drive, GEO, CYL_COUNT, type EngineProps} from '../Engine/kinematics';
 import {
@@ -63,13 +64,80 @@ const Segment: React.FC<{
   );
 };
 
+// A real inline-4 crankshaft: main journals sit on the axis between cylinders;
+// each throw has an offset crank pin (the rod journal), two webs and a
+// counterweight. Baked at the firing-order phase offsets, rotated as one body.
+const Crankshaft: React.FC<{
+  theta: number;
+  mat: (ghost: boolean, color?: string) => Record<string, unknown>;
+  ghost: boolean;
+}> = ({theta, mat, ghost}) => {
+  const off = [0, 180, 180, 0]; // PHASE[i] % 360
+  const pr = 0.17;
+  const lp = 0.6;
+  const jr = 0.2;
+  const webT = 0.13;
+  const webD = 0.5;
+  const sp = worldX(1) - worldX(0);
+  const jx = [
+    worldX(0) - sp / 2,
+    (worldX(0) + worldX(1)) / 2,
+    (worldX(1) + worldX(2)) / 2,
+    (worldX(2) + worldX(3)) / 2,
+    worldX(3) + sp / 2,
+  ];
+  const mJournal = mat(ghost, METAL_DARK);
+  const mPin = mat(ghost);
+  return (
+    <group rotation={[theta * DEG, 0, 0]}>
+      {jx.map((x, i) => (
+        <mesh key={`j${i}`} position={[x, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[jr, jr, sp * 0.52, 20]} />
+          <meshStandardMaterial {...mJournal} />
+        </mesh>
+      ))}
+      {[0, 1, 2, 3].map((i) => {
+        const x = worldX(i);
+        return (
+          <group key={`t${i}`} rotation={[off[i]! * DEG, 0, 0]}>
+            <mesh position={[x, R, 0]} rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[pr, pr, lp, 18]} />
+              <meshStandardMaterial {...mPin} />
+            </mesh>
+            {[-(lp / 2 + webT / 2), lp / 2 + webT / 2].map((dx, k) => (
+              <mesh key={`w${k}`} position={[x + dx, R / 2, 0]}>
+                <boxGeometry args={[webT, R + 2 * pr, webD]} />
+                <meshStandardMaterial {...mJournal} />
+              </mesh>
+            ))}
+            <mesh position={[x, -R * 0.72, 0]}>
+              <boxGeometry args={[lp + webT * 2, R * 0.95, webD * 1.2]} />
+              <meshStandardMaterial {...mJournal} />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+};
+
 const EngineSceneInner: React.FC<Engine3DProps> = (props) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const {gl, camera} = useThree();
+  const {gl, camera, scene} = useThree();
   const state = drive(frame, fps, props);
 
   gl.localClippingEnabled = true;
+
+  // Studio reflections from a procedural room (CC0, no HDRI file needed) so the
+  // metal reads as metal without an environment texture committed to the repo.
+  const envMap = useMemo(() => {
+    const pmrem = new THREE.PMREMGenerator(gl);
+    const tex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    pmrem.dispose();
+    return tex;
+  }, [gl]);
+  scene.environment = envMap;
 
   // Cutaway plane: remove the front half (z > cut) so the mechanism is visible.
   const cut = props.cutaway ?? 1;
@@ -103,15 +171,22 @@ const EngineSceneInner: React.FC<Engine3DProps> = (props) => {
 
   const metalMat = (ghost: boolean, color = METAL) =>
     ghost
-      ? {color: COLORS.ghost, transparent: true, opacity: 0.1, depthWrite: false, roughness: 0.9, metalness: 0.0}
-      : {color, metalness: 0.65, roughness: 0.34};
+      ? {color: '#4A525E', transparent: true, opacity: 0.12, depthWrite: false, roughness: 0.9, metalness: 0.0}
+      : {color, metalness: 0.95, roughness: 0.34, envMapIntensity: 1.0};
 
   return (
     <>
-      <ambientLight intensity={0.75} />
-      <directionalLight position={[6, 11, 8]} intensity={1.5} />
-      <directionalLight position={[-7, 4, -3]} intensity={0.5} />
-      <directionalLight position={[0, 3, 10]} intensity={0.4} />
+      <ambientLight intensity={0.25} />
+      {/* key */}
+      <directionalLight position={[6, 11, 8]} intensity={1.6} color="#FFF4E8" />
+      {/* rim / back light for separation on the dark background */}
+      <directionalLight position={[-8, 5, -7]} intensity={1.1} color="#8FB4FF" />
+      {/* soft front fill */}
+      <directionalLight position={[0, 2, 11]} intensity={0.35} />
+
+      {/* Crankshaft: journals on-axis between cylinders, offset pins carry the
+          rods, webs + counterweights. Rotates as one rigid body. */}
+      <Crankshaft theta={state.theta} mat={metalMat} ghost={ghosted('crank')} />
 
       {/* Engine block (sectioned by the clip plane) */}
       <mesh position={[0, (DECK_Y + BLOCK_BOT_Y) / 2, 0]}>
@@ -129,15 +204,6 @@ const EngineSceneInner: React.FC<Engine3DProps> = (props) => {
           roughness={0.8}
         />
       </mesh>
-
-      {/* Crank main journal along X */}
-      <Segment
-        from={new THREE.Vector3(-ENGINE_HALF_WIDTH + 0.2, 0, 0)}
-        to={new THREE.Vector3(ENGINE_HALF_WIDTH - 0.2, 0, 0)}
-        radius={0.18}
-      >
-        <meshStandardMaterial {...metalMat(ghosted('crank'), METAL_DARK)} />
-      </Segment>
 
       {state.cylinders.map((c) => {
         const x = worldX(c.index);
@@ -191,18 +257,17 @@ const EngineSceneInner: React.FC<Engine3DProps> = (props) => {
               <meshStandardMaterial {...metalMat(crankGhost)} />
             </mesh>
 
-            {/* Connecting rod */}
-            <Segment from={pistonPin} to={crankPin} radius={0.11}>
+            {/* Connecting rod: small-end at the piston, big-end wrapping the pin */}
+            <Segment from={pistonPin} to={crankPin} radius={0.1}>
               <meshStandardMaterial {...metalMat(crankGhost, METAL_DARK)} />
             </Segment>
-
-            {/* Crank web + pin */}
-            <Segment from={new THREE.Vector3(x, 0, 0)} to={crankPin} radius={0.12}>
-              <meshStandardMaterial {...metalMat(crankGhost, METAL_DARK)} />
-            </Segment>
-            <mesh position={crankPin}>
-              <sphereGeometry args={[0.16, 16, 16]} />
+            <mesh position={pistonPin}>
+              <sphereGeometry args={[0.13, 16, 16]} />
               <meshStandardMaterial {...metalMat(crankGhost)} />
+            </mesh>
+            <mesh position={crankPin} rotation={[0, Math.PI / 2, 0]}>
+              <torusGeometry args={[0.25, 0.08, 14, 24]} />
+              <meshStandardMaterial {...metalMat(crankGhost, METAL_DARK)} />
             </mesh>
 
             {/* Valves: intake (+z), exhaust (-z) */}
@@ -246,8 +311,8 @@ function renderValve(
 ) {
   const headY = DECK_Y - lift * VALVE_MAX_LIFT;
   const mat = ghost
-    ? {color: COLORS.ghost, transparent: true, opacity: 0.1, depthWrite: false}
-    : {color: METAL_DARK, metalness: 0.6, roughness: 0.4};
+    ? {color: '#4A525E', transparent: true, opacity: 0.12, depthWrite: false}
+    : {color: METAL_DARK, metalness: 0.9, roughness: 0.38, envMapIntensity: 1.0};
   const seatMat = ghost
     ? {color: COLORS.ghost, transparent: true, opacity: 0.1, depthWrite: false}
     : {color: accent, emissive: accent, emissiveIntensity: lift > 0.1 ? 0.5 : 0.1, metalness: 0.3, roughness: 0.5};
@@ -267,8 +332,8 @@ function renderValve(
 
 function renderCam(x: number, z: number, angleDeg: number, ghost: boolean) {
   const mat = ghost
-    ? {color: COLORS.ghost, transparent: true, opacity: 0.1, depthWrite: false}
-    : {color: METAL, metalness: 0.6, roughness: 0.35};
+    ? {color: '#4A525E', transparent: true, opacity: 0.12, depthWrite: false}
+    : {color: METAL, metalness: 0.9, roughness: 0.34, envMapIntensity: 1.0};
   return (
     <group position={[x, CAM_Y, z]} rotation={[angleDeg * DEG, 0, 0]}>
       <mesh rotation={[0, 0, Math.PI / 2]}>

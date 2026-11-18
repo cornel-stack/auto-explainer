@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, useVideoConfig} from 'remotion';
 import {COLORS, TYPE} from '../theme/tokens';
+import {useTheme} from '../theme/theme';
 import {enter} from '../theme/motion';
 
 // Closing card. Points to the next video; no outro sting.
@@ -10,11 +11,14 @@ export const Outro: React.FC<{text: string; nextTitle?: string}> = ({
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const theme = useTheme();
   const t = enter(frame, fps);
   return (
     <AbsoluteFill
       style={{
-        background: COLORS.bg,
+        background: theme.dark
+          ? `radial-gradient(130% 110% at 50% 40%, ${theme.bgTop} 0%, ${theme.bg} 65%)`
+          : theme.bg,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -30,7 +34,7 @@ export const Outro: React.FC<{text: string; nextTitle?: string}> = ({
           fontFamily: TYPE.family,
           fontSize: 48,
           fontWeight: 500,
-          color: COLORS.ink,
+          color: theme.ink,
           lineHeight: 1.3,
           opacity: t,
           transform: `translateY(${(1 - t) * 10}px)`,
@@ -65,7 +69,7 @@ export const Outro: React.FC<{text: string; nextTitle?: string}> = ({
               fontFamily: TYPE.family,
               fontSize: 34,
               fontWeight: 600,
-              color: COLORS.ink,
+              color: theme.ink,
             }}
           >
             {nextTitle}

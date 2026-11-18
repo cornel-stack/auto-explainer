@@ -35,6 +35,7 @@
     "keyword": {"type": "string"},
     "target_minutes": {"type": "number", "minimum": 1, "maximum": 30},
     "tier": {"enum": [1, 2, 3]},
+    "theme": {"enum": ["light", "dark"]},
     "thumbnail": {
       "type": "object",
       "required": ["mode", "headline", "accent"],

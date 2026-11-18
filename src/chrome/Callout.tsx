@@ -1,6 +1,7 @@
 import React from 'react';
 import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {COLORS, STROKE, TYPE} from '../theme/tokens';
+import {useTheme} from '../theme/theme';
 import {enter} from '../theme/motion';
 
 export interface CalloutProps {
@@ -24,6 +25,7 @@ export const Callout: React.FC<CalloutProps> = ({
 }) => {
   const frame = useCurrentFrame();
   const {fps, width} = useVideoConfig();
+  const theme = useTheme();
   const t = enter(frame, fps, appearAt);
   if (frame < appearAt) return null;
 
@@ -46,13 +48,15 @@ export const Callout: React.FC<CalloutProps> = ({
     fontFamily: TYPE.family,
     fontSize: TYPE.callout.size,
     fontWeight: TYPE.callout.weight,
-    color: COLORS.ink,
-    background: COLORS.panel,
+    color: theme.ink,
+    background: theme.panel,
     border: `2px solid ${color}`,
     borderRadius: 10,
     padding: '10px 18px',
     lineHeight: 1.2,
-    boxShadow: '0 6px 20px rgba(17,19,24,0.08)',
+    boxShadow: theme.dark
+      ? '0 8px 28px rgba(0,0,0,0.55)'
+      : '0 6px 20px rgba(17,19,24,0.08)',
     opacity: t,
     transform: `translateY(${(1 - t) * 8}px)`,
   };

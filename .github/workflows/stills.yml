@@ -1,0 +1,81 @@
+name: stills
+
+# Fast visual feedback: render one PNG at each scene's mid-frame (no full video)
+# so the look can be iterated in ~5 min instead of a 20-min render.
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Video slug'
+        required: true
+        default: 'how-a-car-engine-works'
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'videos/**/script.json'
+      - 'remotion.config.ts'
+      - '.github/workflows/stills.yml'
+
+concurrency:
+  group: stills-${{ github.event.inputs.slug || 'how-a-car-engine-works' }}
+  cancel-in-progress: true
+
+jobs:
+  stills:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SLUG: ${{ github.event.inputs.slug || 'how-a-car-engine-works' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - run: npm ci
+      - run: pip install -r pipeline/requirements.txt
+
+      - name: Chrome + ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg libnss3 libdbus-1-3 libatk1.0-0 \
+            libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 \
+            libxdamage1 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 || true
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
+          npx remotion browser ensure
+
+      # Cache narration so timing.json is produced without re-synthesizing.
+      - name: Cache narration
+        uses: actions/cache@v4
+        with:
+          path: videos/${{ env.SLUG }}/.cache
+          key: tts-${{ env.SLUG }}-${{ hashFiles(format('videos/{0}/script.json', env.SLUG), 'pipeline/tts.py') }}
+
+      - name: Narrate (for timing)
+        run: python pipeline/tts.py "videos/$SLUG"
+
+      - name: Render a still at each scene mid-frame
+        run: |
+          mkdir -p stills
+          i=0
+          for pair in $(python pipeline/midframes.py "videos/$SLUG"); do
+            name=${pair%%:*}; frame=${pair##*:}
+            i=$((i+1))
+            npx remotion still "$SLUG" "stills/$(printf '%02d' $i)-$name.png" \
+              --frame=$frame --props="./videos/$SLUG/.cache/props.json" --gl=swangle
+          done
+          ls -lh stills/
+
+      - name: Upload stills
+        uses: actions/upload-artifact@v4
+        with:
+          name: stills-${{ env.SLUG }}
+          path: stills/*.png
+          retention-days: 14

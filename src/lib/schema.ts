@@ -67,6 +67,7 @@ export interface Script {
   keyword: string;
   target_minutes: number;
   tier: 1 | 2 | 3;
+  theme?: 'light' | 'dark';
   thumbnail: Thumbnail;
   sources: Source[];
   lexicon: Record<string, string>;

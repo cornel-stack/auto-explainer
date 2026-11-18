@@ -7,14 +7,6 @@ on:
         description: 'Video slug under videos/ to render'
         required: true
         default: 'how-a-car-engine-works'
-  push:
-    branches: [main]
-    paths:
-      - 'videos/**/script.json'
-      - 'src/**'
-      - 'pipeline/**'
-      - 'remotion.config.ts'
-      - '.github/workflows/render.yml'
 
 concurrency:
   group: render-${{ github.event.inputs.slug || 'how-a-car-engine-works' }}

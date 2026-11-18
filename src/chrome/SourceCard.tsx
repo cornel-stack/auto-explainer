@@ -1,6 +1,7 @@
 import React from 'react';
 import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {COLORS, TYPE} from '../theme/tokens';
+import {useTheme} from '../theme/theme';
 import {enter} from '../theme/motion';
 
 // The document a figure comes from, shown bottom-right when a quantitative
@@ -11,6 +12,7 @@ export const SourceCard: React.FC<{title: string; url?: string}> = ({
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const theme = useTheme();
   const t = enter(frame, fps, 6);
   let host = '';
   try {
@@ -28,14 +30,16 @@ export const SourceCard: React.FC<{title: string; url?: string}> = ({
         display: 'flex',
         gap: 14,
         alignItems: 'flex-start',
-        background: COLORS.panel,
-        border: `1px solid ${COLORS.ghost}`,
+        background: theme.panel,
+        border: `1px solid ${theme.dark ? '#2C333F' : COLORS.ghost}`,
         borderLeft: `4px solid ${COLORS.bar}`,
         borderRadius: 8,
         padding: '12px 16px',
         opacity: t,
         transform: `translateY(${(1 - t) * 6}px)`,
-        boxShadow: '0 4px 16px rgba(17,19,24,0.06)',
+        boxShadow: theme.dark
+          ? '0 8px 24px rgba(0,0,0,0.5)'
+          : '0 4px 16px rgba(17,19,24,0.06)',
       }}
     >
       <div>
@@ -56,7 +60,7 @@ export const SourceCard: React.FC<{title: string; url?: string}> = ({
           style={{
             fontFamily: TYPE.family,
             fontSize: TYPE.caption.size,
-            color: COLORS.ink,
+            color: theme.ink,
             lineHeight: 1.25,
           }}
         >
@@ -67,7 +71,7 @@ export const SourceCard: React.FC<{title: string; url?: string}> = ({
             style={{
               fontFamily: TYPE.mono,
               fontSize: 16,
-              color: COLORS.ink2,
+              color: theme.ink2,
               marginTop: 4,
             }}
           >

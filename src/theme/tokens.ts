@@ -19,6 +19,17 @@ export const COLORS = {
 
 export const GHOST_OPACITY = 0.35;
 
+// Dark register (hero 3D videos). Accents (bar, fuel, fault, …) stay the same —
+// they pop against the dark background.
+export const DARK = {
+  bg: '#0B0E13', // near-black page background
+  bgTop: '#161B24', // top of the subtle vignette
+  ink: '#EEF1F5', // primary text on dark
+  ink2: '#9AA3AF', // secondary text on dark
+  panel: '#1B2029', // cards on dark
+  ghost: '#59606C', // de-emphasised 3D parts on dark
+} as const;
+
 // Four-stroke chamber tints (Spec §5 / Production Plan): intake blue,
 // compression orange, power red, exhaust grey.
 export const STROKE_COLORS = {

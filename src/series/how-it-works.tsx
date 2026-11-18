@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Sequence, useVideoConfig} from 'remotion';
 import {COLORS} from '../theme/tokens';
+import {ThemeProvider, themeFor} from '../theme/theme';
 import {Intro} from '../chrome/Intro';
 import {Outro} from '../chrome/Outro';
 import {TitleCard} from '../chrome/TitleCard';
@@ -37,9 +38,12 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({script, timing}) => {
   const totalFrames = last ? last.start_frame + last.frames : 0;
 
   const accentWord = script.keyword.split(' ')[0];
+  const mode = script.theme ?? 'light';
+  const theme = themeFor(mode);
 
   return (
-    <AbsoluteFill style={{background: COLORS.bg}}>
+    <ThemeProvider mode={mode}>
+    <AbsoluteFill style={{background: theme.bg}}>
       {/* Intro */}
       {intro ? (
         <Sequence from={intro.start_frame} durationInFrames={intro.frames}>
@@ -65,7 +69,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({script, timing}) => {
               from={beat.start_frame}
               durationInFrames={beat.frames}
             >
-              <AbsoluteFill style={{background: COLORS.bg}}>
+              <AbsoluteFill style={{background: theme.bg}}>
                 <TitleCard
                   title={scene.title ?? scene.section ?? script.title}
                   subtitle={scene.narration}
@@ -101,6 +105,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({script, timing}) => {
         </Sequence>
       ) : null}
     </AbsoluteFill>
+    </ThemeProvider>
   );
 };
 

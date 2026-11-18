@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, useVideoConfig} from 'remotion';
 import {COLORS} from '../theme/tokens';
+import {useTheme} from '../theme/theme';
 import {SectionBar} from '../chrome/SectionBar';
 import {SourceCard} from '../chrome/SourceCard';
 import {Callout} from '../chrome/Callout';
@@ -21,6 +22,7 @@ export const MechanismScene: React.FC<{
 }> = ({scene, beat, source, globalStart, totalFrames}) => {
   const frame = useCurrentFrame();
   const {fps, width, height} = useVideoConfig();
+  const theme = useTheme();
 
   const Visual = COMPONENTS[scene.visual.component];
   const is3D = THREE_D.has(scene.visual.component);
@@ -65,8 +67,12 @@ export const MechanismScene: React.FC<{
 
   const progress = (globalStart + frame) / totalFrames;
 
+  const background = theme.dark
+    ? `radial-gradient(125% 115% at 60% 28%, ${theme.bgTop} 0%, ${theme.bg} 60%)`
+    : theme.bg;
+
   return (
-    <AbsoluteFill style={{background: COLORS.bg}}>
+    <AbsoluteFill style={{background}}>
       {Visual ? <Visual {...scene.visual.props} beatFrames={beatFrames} /> : null}
 
       {scene.section ? <SectionBar label={scene.section} /> : null}
