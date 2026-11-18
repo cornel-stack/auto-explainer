@@ -40,22 +40,25 @@ export const cameraFor = (
   const fx = worldX(focusCyl);
   switch (preset) {
     case 'cylinder':
+      // Framed so the spark plug at the top and the crank at the bottom both fit.
       return {
-        pos: [fx + 3.4 + drift, 3.4, 8],
-        target: [fx, 2.7, 0],
-        fov: 36,
+        pos: [fx + 3.8 + drift, 3.3, 9.6],
+        target: [fx, 3.0, 0],
+        fov: 34,
       };
     case 'valvetrain':
-      return {pos: [1 + drift, 8.5, 7.5], target: [0, 3.2, 0], fov: 40};
+      // High and pulled back so the cams sit centre-frame, clear of the
+      // top-left section label.
+      return {pos: [1.2 + drift, 10, 9.5], target: [0, 3.1, 0], fov: 44};
     case 'recap': {
       const a = t01 * Math.PI * 0.9 - 0.45;
-      return {pos: [Math.sin(a) * 12, 5.2, Math.cos(a) * 12], target: [0, 2.8, 0], fov: 34};
+      return {pos: [Math.sin(a) * 13.5, 6, Math.cos(a) * 13.5], target: [0, 3.0, 0], fov: 35};
     }
     case 'intro':
-      return {pos: [6 + drift, 4.6, 12.5], target: [0, 2.7, 0], fov: 32};
+      return {pos: [6.5 + drift, 4.8, 14], target: [0, 3.0, 0], fov: 33};
     case 'wide':
     default:
-      return {pos: [7 + drift, 5, 11.5], target: [0, 2.8, 0], fov: 35};
+      return {pos: [8 + drift, 5.6, 13], target: [0, 3.1, 0], fov: 35};
   }
 };
 
