@@ -1,0 +1,50 @@
+{
+  "slug": "diesel-3d-proof",
+  "series": "what-happens-if",
+  "title": "3D World Engine — Proof Scene",
+  "alt_titles": ["Immersive 3D animation test"],
+  "keyword": "3d animation engine proof",
+  "target_minutes": 1,
+  "tier": 2,
+  "theme": "dark",
+  "thumbnail": {"mode": "hero", "headline": "3D PROOF", "accent": "bar"},
+  "sources": [
+    {
+      "id": "aa-misfuel",
+      "title": "The AA — Putting the wrong fuel in your car (misfuelling advice)",
+      "url": "https://www.theaa.com/breakdown-cover/advice/wrong-fuel"
+    }
+  ],
+  "lexicon": {},
+  "intro": {
+    "narration": "New look: a fully three-dimensional world, with the camera flying through the real parts and the labels living in the scene. No more flat panels. Watch."
+  },
+  "scenes": [
+    {
+      "id": "fuelpath",
+      "type": "beat",
+      "source": "aa-misfuel",
+      "narration": "Watch what the diesel actually does, because it does not stay in the tank. The fuel pump pushes it through the whole system. It flows out of the tank, then through the lift pump, onward through the fuel filter, up into the high-pressure rail, and finally to the injectors that spray it into each cylinder. Every part it reaches gets coated in an oily film. The spark plugs foul, the filter clogs, and the fine injector nozzles gum up with residue, which is why the real fix is draining and flushing the entire line, not just emptying the tank.",
+      "visual": {
+        "component": "World3D",
+        "props": {
+          "kicker": "The fuel path · in 3D",
+          "fault": "injectors",
+          "steps": [
+            {"cue": "stay in the tank", "at": 0.06, "focus": "tank", "reach": 0.04, "reveal": 1},
+            {"cue": "through the lift pump", "at": 0.24, "focus": "liftPump", "reach": 0.2, "reveal": 2},
+            {"cue": "through the fuel filter", "at": 0.36, "focus": "filter", "reach": 0.38, "reveal": 3},
+            {"cue": "into the high-pressure rail", "at": 0.5, "focus": "rail", "reach": 0.62, "reveal": 5},
+            {"cue": "to the injectors", "at": 0.64, "focus": "injectors", "reach": 0.82, "reveal": 6, "highlight": "injectors"},
+            {"cue": "into each cylinder", "at": 0.74, "focus": "chamber", "reach": 1.0, "reveal": 7},
+            {"cue": "gum up with residue", "at": 0.88, "focus": "center", "reach": 1.0, "reveal": 7, "highlight": "injectors"}
+          ]
+        }
+      }
+    }
+  ],
+  "outro": {
+    "narration": "That is the new animation set: a living three-dimensional world instead of slides. If this is the direction, I will rebuild the full videos this way. Subscribe to see them.",
+    "next_slug": "diesel-in-a-gas-car"
+  }
+}

@@ -3,6 +3,7 @@ import {AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame, useVideoCo
 import {ThemeProvider} from '../theme/theme';
 import {StageBackground} from '../theme/StageBackground';
 import {CinematicScene} from '../scenes/cinematic';
+import {WorldScene} from '../scenes/world3d';
 import {Engine3D} from '../components/Engine3D';
 import {Peep} from '../components/Peep/Peep';
 import {CINEMA} from '../theme/cinema';
@@ -151,9 +152,10 @@ export const Cinematic: React.FC<CinematicProps> = ({script, timing}) => {
           const beat = getBeat(t, scene.id);
           if (!beat || !scene.visual) return null;
           const source = script.sources.find((s) => s.id === scene.source);
+          const Renderer = scene.visual.component === 'World3D' ? WorldScene : CinematicScene;
           return (
             <Sequence key={scene.id} from={beat.start_frame} durationInFrames={beat.frames}>
-              <CinematicScene
+              <Renderer
                 scene={scene}
                 beat={beat}
                 source={source}

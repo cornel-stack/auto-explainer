@@ -30,6 +30,58 @@ const smooth = (t: number) => t * t * (3 - 2 * t);
 
 const CAM_EASE_FRAMES = 26;
 
+type Resolved = ChoreoStep & {frame: number};
+
+export interface ResolvedChoreo {
+  idx: number;
+  prev: Resolved;
+  cur: Resolved;
+  next: Resolved;
+  camT: number; // 0..1 ease since the current step fired
+  reach: number;
+  revealCount: number;
+  highlight?: string;
+}
+
+// Resolve steps to frames (cue → word time, else fractional) and return the
+// active step + easing — the generic core used by both the 2D camera and the
+// 3D flythrough camera.
+export function resolveChoreo(
+  frame: number,
+  fps: number,
+  beat: TimedBeat | null,
+  beatFrames: number,
+  steps: ChoreoStep[]
+): ResolvedChoreo {
+  const n = Math.max(1, steps.length);
+  const resolved: Resolved[] = steps.map((s, i) => {
+    let fr = s.cue ? findCueFrame(beat, fps, s.cue) : null;
+    if (fr == null) fr = Math.round((s.at ?? i / n) * beatFrames);
+    return {...s, frame: fr};
+  });
+  for (let i = 1; i < resolved.length; i++) {
+    if (resolved[i]!.frame <= resolved[i - 1]!.frame) resolved[i]!.frame = resolved[i - 1]!.frame + 8;
+  }
+  let idx = 0;
+  for (let i = 0; i < resolved.length; i++) if (frame >= resolved[i]!.frame) idx = i;
+  const cur = resolved[idx]!;
+  const prev = resolved[Math.max(0, idx - 1)]!;
+  const next = resolved[Math.min(resolved.length - 1, idx + 1)]!;
+  const camT = smooth(clamp((frame - cur.frame) / CAM_EASE_FRAMES, 0, 1));
+
+  let reach = cur.reach ?? 0;
+  if (next.frame > cur.frame && next.reach != null) {
+    const rt = clamp((frame - cur.frame) / (next.frame - cur.frame), 0, 1);
+    reach = lerp(cur.reach ?? 0, next.reach, rt);
+  }
+  let highlight: string | undefined;
+  for (let i = 0; i <= idx; i++) if (resolved[i]!.highlight) highlight = resolved[i]!.highlight;
+
+  return {idx, prev, cur, next, camT, reach, revealCount: cur.reveal ?? steps.length, highlight};
+}
+
+export {lerp as _lerp, smooth as _smooth};
+
 export function computeChoreo(
   frame: number,
   fps: number,

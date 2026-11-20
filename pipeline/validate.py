@@ -27,6 +27,7 @@ KNOWN_COMPONENTS = {
     "Clip",
     "FlowLoop",
     "Timeline",
+    "World3D",
     "Stage",
 }
 

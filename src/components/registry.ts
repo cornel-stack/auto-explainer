@@ -28,6 +28,9 @@ export const COMPONENTS: Record<string, React.FC<any>> = {
   Clip,
   FlowLoop,
   Timeline,
+  // World3D scenes are handled by WorldScene (not this registry); the entry
+  // exists so validate.py accepts the component name.
+  World3D: Stage,
   Stage,
 };
 
