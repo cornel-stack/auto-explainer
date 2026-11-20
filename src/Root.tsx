@@ -12,6 +12,7 @@ import type {Script, Series, Timing} from './lib/schema';
 import engineScript from '../videos/how-a-car-engine-works/script.json';
 import premiumScript from '../videos/premium-vs-regular-gas/script.json';
 import dieselScript from '../videos/diesel-in-a-gas-car/script.json';
+import dieselProofScript from '../videos/diesel-choreo-proof/script.json';
 
 // One series builder per `series` value (Spec §7). Each takes {script, timing}
 // and exposes a matching total-frame estimator for the composition length.
@@ -38,6 +39,7 @@ const SCRIPTS: Script[] = [
   engineScript as unknown as Script,
   premiumScript as unknown as Script,
   dieselScript as unknown as Script,
+  dieselProofScript as unknown as Script,
 ];
 
 export const RemotionRoot: React.FC = () => {

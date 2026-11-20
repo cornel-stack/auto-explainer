@@ -5,6 +5,9 @@ import {Peep} from '../components/Peep/Peep';
 import {Illustration} from '../components/Illustration/Illustration';
 import {CINEMA, accentColor, type CinemaAccent} from '../theme/cinema';
 import {MotionStage, AccentFX} from '../theme/motionfx';
+import {Camera2D} from '../theme/Camera2D';
+import {computeChoreo, type ChoreoStep} from '../lib/choreo';
+import {FlowLoop, flowAnchors} from '../components/FlowLoop/FlowLoop';
 import {FONT_MONO} from '../theme/fonts';
 import {
   KineticHeadline,
@@ -34,6 +37,7 @@ const RESERVED = new Set([
   'credit',
   'heroBox',
   'align',
+  'steps',
 ]);
 
 type Layout = 'fullbleed' | 'left' | 'right' | 'center';
@@ -62,6 +66,7 @@ interface Overlay {
   credit?: string;
   heroBox?: {x: number; y: number; w: number; h: number};
   align?: 'left' | 'center';
+  steps?: ChoreoStep[];
 }
 
 const textBoxFor = (layout: Layout, align: 'left' | 'center') => {
@@ -127,7 +132,7 @@ export const CinematicScene: React.FC<{
   index?: number;
 }> = ({scene, beat, source, globalStart, totalFrames, index = 0}) => {
   const frame = useCurrentFrame();
-  const {width, height} = useVideoConfig();
+  const {fps} = useVideoConfig();
 
   const allProps = scene.visual.props as Record<string, unknown>;
   const o = allProps as Overlay;
@@ -142,7 +147,24 @@ export const CinematicScene: React.FC<{
 
   // Hero placement: full-canvas components (3D / Chart / Table / Tree) always
   // fill the frame; Photo/Illustration heroes may be boxed.
-  const heroEl = Hero ? <Hero {...heroProps} beatFrames={beatFrames} /> : null;
+  let heroEl: React.ReactNode = Hero ? <Hero {...heroProps} beatFrames={beatFrames} /> : null;
+
+  // Choreographed hero: drive a motivated camera + progressive reveal from the
+  // beat's `steps`, locked to the narration word-timings. (Prototype: FlowLoop.)
+  if (o.steps && scene.visual.component === 'FlowLoop') {
+    const ch = computeChoreo(frame, fps, beat, beatFrames, o.steps, flowAnchors());
+    heroEl = (
+      <Camera2D x={ch.cam.x} y={ch.cam.y} zoom={ch.cam.zoom}>
+        <FlowLoop
+          {...heroProps}
+          reach={ch.reach}
+          revealCount={ch.revealCount}
+          highlight={ch.highlight ?? (heroProps.highlight as string | undefined)}
+          beatFrames={beatFrames}
+        />
+      </Camera2D>
+    );
+  }
 
   const fxAccent = (o.headlineAccent ?? o.kickerAccent ?? 'cyan') as CinemaAccent;
 

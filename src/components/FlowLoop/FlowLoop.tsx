@@ -17,7 +17,7 @@ interface Node {
   kind: 'tank' | 'pump' | 'filter' | 'rail' | 'injector' | 'chamber';
 }
 
-const DEFAULT_NODES: Node[] = [
+export const FLOW_NODES: Node[] = [
   {id: 'tank', label: 'Tank', x: 230, y: 560, kind: 'tank'},
   {id: 'liftPump', label: 'Lift pump', x: 470, y: 500, kind: 'pump'},
   {id: 'filter', label: 'Filter', x: 720, y: 580, kind: 'filter'},
@@ -26,6 +26,13 @@ const DEFAULT_NODES: Node[] = [
   {id: 'injectors', label: 'Injectors', x: 1480, y: 500, kind: 'injector'},
   {id: 'chamber', label: 'Chamber', x: 1710, y: 580, kind: 'chamber'},
 ];
+
+// Anchor points for the choreography camera (node centres + "center").
+export const flowAnchors = (): Record<string, {x: number; y: number}> => {
+  const a: Record<string, {x: number; y: number}> = {center: {x: 960, y: 540}};
+  for (const n of FLOW_NODES) a[n.id] = {x: n.x, y: n.y};
+  return a;
+};
 
 const DIESEL = '#C9A24B'; // amber-olive contaminant
 const PARTICLES = 46;
@@ -36,16 +43,20 @@ export interface FlowLoopProps {
   fault?: string; // node id that fails
   highlight?: string; // node id to spotlight
   targetReach?: number; // 0..1 how far the contaminant advances this beat
+  reach?: number; // choreography override of the front position
+  revealCount?: number; // choreography: how many nodes are revealed so far
   flow?: boolean;
   beatFrames?: number;
 }
 
 export const FlowLoop: React.FC<FlowLoopProps> = ({
-  nodes = DEFAULT_NODES,
+  nodes = FLOW_NODES,
   cleanColor = 'fuel',
   fault,
   highlight,
   targetReach = 1,
+  reach: reachProp,
+  revealCount,
   flow = true,
   beatFrames = 300,
 }) => {
@@ -73,7 +84,10 @@ export const FlowLoop: React.FC<FlowLoopProps> = ({
     return pts[pts.length - 1]!;
   };
 
-  const reach = interpolate(frame, [10, beatFrames - 10], [0, targetReach], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const reach =
+    reachProp != null
+      ? reachProp
+      : interpolate(frame, [10, beatFrames - 10], [0, targetReach], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const frontDist = reach * total;
   const pathD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
 
@@ -110,14 +124,15 @@ export const FlowLoop: React.FC<FlowLoopProps> = ({
           : null}
 
         {/* Nodes */}
-        {nodes.map((n) => {
-          const isFault = fault === n.id;
-          const isHi = highlight === n.id;
-          const reached = frontDist >= cumDistTo(nodes, n.id, segLen);
+        {nodes.map((n, ni) => {
+          const revealed = revealCount == null ? true : ni < revealCount;
+          const isFault = fault === n.id && revealed;
+          const isHi = highlight === n.id && revealed;
+          const reached = revealed && frontDist >= cumDistTo(nodes, n.id, segLen);
           const color = isFault ? CINEMA.power : reached ? DIESEL : isHi ? clean : CINEMA.ink2;
           const r = 30;
           return (
-            <g key={n.id}>
+            <g key={n.id} opacity={revealed ? 1 : 0.12}>
               <circle
                 cx={n.x}
                 cy={n.y}

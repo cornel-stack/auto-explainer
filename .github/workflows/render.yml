@@ -150,6 +150,11 @@ jobs:
       - name: Render thumbnail stills
         run: |
           mkdir -p thumbs
+          # Skip gracefully if this slug has no thumbnail composition (e.g. a proof).
+          if ! npx remotion compositions 2>/dev/null | grep -q "thumb-$SLUG-a"; then
+            echo "no thumbnail compositions for $SLUG; skipping"
+            exit 0
+          fi
           for v in a b c; do
             for attempt in 1 2 3; do
               npx remotion still "thumb-$SLUG-$v" "thumbs/thumbnail-$v.png" --timeout=120000 && break
