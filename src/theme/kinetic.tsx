@@ -60,15 +60,18 @@ export const KineticHeadline: React.FC<{
         const isAccent =
           accNorm && w.toLowerCase().replace(/[^a-z0-9]/g, '') === accNorm;
         const c = isAccent ? acc : color;
+        // Continuous idle bob so the headline keeps breathing after it lands.
+        const idle = Math.sin((frame - delay - i * stagger) / fps * 1.8 + i) * size * 0.03 * p;
+        const glowPulse = isAccent ? 1 + 0.25 * Math.sin(frame / fps * 3 + i) : 1;
         return (
-          <span key={i} style={{display: 'inline-block', overflow: 'hidden', paddingBottom: size * 0.08}}>
+          <span key={i} style={{display: 'inline-block', overflow: 'hidden', paddingBottom: size * 0.1}}>
             <span
               style={{
                 display: 'inline-block',
-                transform: `translateY(${(1 - p) * 110}%) rotate(${(1 - p) * -4}deg)`,
+                transform: `translateY(${(1 - p) * size * 1.05 + idle}px) rotate(${(1 - p) * -4}deg)`,
                 opacity: p,
                 color: c,
-                textShadow: isAccent ? textGlow(acc, 1.1) : 'none',
+                textShadow: isAccent ? textGlow(acc, glowPulse) : 'none',
               }}
             >
               {w}
@@ -133,6 +136,9 @@ export const CountUp: React.FC<{
   const pop = clampSpring(frame, fps, delay, 160);
   const val = from + (to - from) * p;
   const c = accentColor(accent);
+  // Keep the stat alive: a gentle breathing scale + pulsing glow.
+  const breathe = 1 + 0.018 * Math.sin((frame - delay) / fps * 3.5);
+  const glowStrength = 1.4 * (1 + 0.22 * Math.sin((frame - delay) / fps * 3));
   return (
     <span
       style={{
@@ -141,9 +147,9 @@ export const CountUp: React.FC<{
         fontWeight: 800,
         letterSpacing: DISPLAY.stat.tracking,
         color: c,
-        textShadow: textGlow(c, 1.4),
+        textShadow: textGlow(c, glowStrength),
         display: 'inline-block',
-        transform: `scale(${0.8 + 0.2 * pop})`,
+        transform: `scale(${(0.8 + 0.2 * pop) * breathe})`,
       }}
     >
       {prefix}
@@ -164,6 +170,7 @@ export const Chip: React.FC<{
   const {fps} = useVideoConfig();
   const p = clampSpring(frame, fps, delay, 160);
   const c = accentColor(accent);
+  const bob = Math.sin((frame - delay) / fps * 2 + delay) * 4 * p;
   return (
     <span
       style={{
@@ -181,9 +188,9 @@ export const Chip: React.FC<{
         letterSpacing: 1.5,
         textTransform: 'uppercase',
         opacity: p,
-        transform: `scale(${0.85 + 0.15 * p})`,
+        transform: `translateY(${bob}px) scale(${0.85 + 0.15 * p})`,
         filter: `blur(${(1 - p) * 6}px)`,
-        boxShadow: `0 0 20px ${c}33`,
+        boxShadow: `0 0 ${20 + 10 * (1 + Math.sin((frame - delay) / fps * 3))}px ${c}33`,
       }}
     >
       <span style={{width: 8, height: 8, borderRadius: 4, background: c, boxShadow: `0 0 10px ${c}`}} />

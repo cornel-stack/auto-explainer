@@ -4,6 +4,7 @@ import {COMPONENTS} from '../components/registry';
 import {Peep} from '../components/Peep/Peep';
 import {Illustration} from '../components/Illustration/Illustration';
 import {CINEMA, accentColor, type CinemaAccent} from '../theme/cinema';
+import {MotionStage, AccentFX} from '../theme/motionfx';
 import {FONT_MONO} from '../theme/fonts';
 import {
   KineticHeadline,
@@ -123,7 +124,8 @@ export const CinematicScene: React.FC<{
   source?: Source;
   globalStart: number;
   totalFrames: number;
-}> = ({scene, beat, source, globalStart, totalFrames}) => {
+  index?: number;
+}> = ({scene, beat, source, globalStart, totalFrames, index = 0}) => {
   const frame = useCurrentFrame();
   const {width, height} = useVideoConfig();
 
@@ -142,8 +144,11 @@ export const CinematicScene: React.FC<{
   // fill the frame; Photo/Illustration heroes may be boxed.
   const heroEl = Hero ? <Hero {...heroProps} beatFrames={beatFrames} /> : null;
 
+  const fxAccent = (o.headlineAccent ?? o.kickerAccent ?? 'cyan') as CinemaAccent;
+
   return (
     <AbsoluteFill>
+      <MotionStage beatFrames={beatFrames} index={index}>
       {/* Hero */}
       {scene.visual.component !== 'Stage' ? (
         o.heroBox ? (
@@ -154,6 +159,9 @@ export const CinematicScene: React.FC<{
           <AbsoluteFill>{heroEl}</AbsoluteFill>
         )
       ) : null}
+
+      {/* Ambient motion layer */}
+      <AccentFX accent={fxAccent} index={index} beatFrames={beatFrames} />
 
       {/* Characters + activity illustrations */}
       {(o.peeps ?? []).map((p, i) => (
@@ -232,6 +240,8 @@ export const CinematicScene: React.FC<{
           {o.credit}
         </div>
       ) : null}
+
+      </MotionStage>
 
       {source ? <CineSource source={source} /> : null}
       <CineProgress progress={progress} />

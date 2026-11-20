@@ -66,6 +66,7 @@ export const Chart: React.FC<ChartProps> = (props) => {
 const Bars: React.FC<
   ChartProps & {grow: number; theme: ReturnType<typeof useTheme>}
 > = ({bars = [], max, unit, grow, theme}) => {
+  const frame = useCurrentFrame();
   const peak = max ?? Math.max(1, ...bars.map((b) => Math.abs(b.value)));
   const n = bars.length;
   const slotW = (BOX.x1 - BOX.x0) / Math.max(1, n);
@@ -87,9 +88,13 @@ const Bars: React.FC<
         />
         {bars.map((b, i) => {
           const cx = BOX.x0 + slotW * (i + 0.5);
-          const h = (Math.abs(b.value) / peak) * fullH * grow;
+          // Continuous breathing so the bars never sit perfectly still.
+          const breathe = 1 + 0.02 * Math.sin(frame / 14 + i * 0.9);
+          const h = (Math.abs(b.value) / peak) * fullH * grow * breathe;
           const color = col(b.color, COLORS.bar);
           const faded = b.color === undefined;
+          // A highlight that rises up a coloured bar on a loop.
+          const riseY = baseY - ((frame * 4 + i * 90) % Math.max(1, h));
           return (
             <g key={`${b.label}-${i}`}>
               <rect
@@ -101,6 +106,9 @@ const Bars: React.FC<
                 fill={color}
                 opacity={faded ? GHOST_OPACITY + 0.25 : 0.92}
               />
+              {!faded && h > 20 ? (
+                <circle cx={cx} cy={riseY} r={7} fill="#FFFFFF" opacity={0.5} style={{filter: `drop-shadow(0 0 8px ${color})`}} />
+              ) : null}
               {/* Value readout */}
               <text
                 x={cx}

@@ -147,7 +147,7 @@ export const Cinematic: React.FC<CinematicProps> = ({script, timing}) => {
           </Sequence>
         ) : null}
 
-        {script.scenes.map((scene) => {
+        {script.scenes.map((scene, i) => {
           const beat = getBeat(t, scene.id);
           if (!beat || !scene.visual) return null;
           const source = script.sources.find((s) => s.id === scene.source);
@@ -159,6 +159,7 @@ export const Cinematic: React.FC<CinematicProps> = ({script, timing}) => {
                 source={source}
                 globalStart={beat.start_frame}
                 totalFrames={totalFrames}
+                index={i}
               />
             </Sequence>
           );

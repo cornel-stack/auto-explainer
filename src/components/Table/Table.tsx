@@ -40,9 +40,19 @@ export const Table: React.FC<TableProps> = ({columns, rows, caption}) => {
   const accentColor = (a?: Accent): string =>
     a ? COLORS[a] : theme.ink2;
 
+  const sweepX = BOX.x0 + ((frame * 7) % (width + 400)) - 200;
+  const tableBottom = bodyTop + rows.length * rowH;
+
   return (
     <AbsoluteFill>
       <svg width={1920} height={1080} viewBox="0 0 1920 1080">
+        <defs>
+          <linearGradient id="tbl-sheen" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+            <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+          </linearGradient>
+        </defs>
         {/* Header */}
         {columns.map((c, i) => (
           <text
@@ -116,6 +126,9 @@ export const Table: React.FC<TableProps> = ({columns, rows, caption}) => {
             {caption}
           </text>
         ) : null}
+
+        {/* Sweeping sheen across the table */}
+        <rect x={sweepX} y={bodyTop - 8} width={140} height={tableBottom - bodyTop} fill="url(#tbl-sheen)" opacity={0.07} transform={`skewX(-14)`} />
       </svg>
     </AbsoluteFill>
   );
