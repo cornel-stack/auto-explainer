@@ -79,6 +79,15 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      # Cache the Remotion-managed Chrome Headless Shell so each of the many
+      # cost-balanced shards doesn't re-download the browser (~1 min each).
+      - name: Cache Remotion browser
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/remotion
+          key: remotion-browser-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            remotion-browser-${{ runner.os }}-
       - name: Chrome Headless Shell + libraries
         run: |
           sudo apt-get update
