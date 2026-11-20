@@ -24,6 +24,7 @@ KNOWN_COMPONENTS = {
     "Peep",
     "Photo",
     "Illustration",
+    "Clip",
     "Stage",
 }
 

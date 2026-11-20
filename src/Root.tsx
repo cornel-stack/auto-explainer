@@ -5,8 +5,11 @@ import {
   totalFramesFor as howItWorksFrames,
 } from './series/how-it-works';
 import {Cinematic, totalFramesFor as cinematicFrames} from './series/cinematic';
+import {Thumbnail} from './Thumbnail';
 import {CANVAS} from './theme/tokens';
 import {ensureFonts} from './theme/fonts';
+
+const THUMB_VARIANTS = ['a', 'b', 'c'] as const;
 import type {Script, Series, Timing} from './lib/schema';
 import engineScript from '../videos/how-a-car-engine-works/script.json';
 import premiumScript from '../videos/premium-vs-regular-gas/script.json';
@@ -70,6 +73,24 @@ export const RemotionRoot: React.FC = () => {
           />
         );
       })}
+
+      {/* Clickbait thumbnails, rendered as stills by CI into the YouTube kit. */}
+      {THUMB_VARIANTS.map((v) => (
+        <Composition
+          key={`thumbnail-${v}`}
+          id={`thumbnail-${v}`}
+          component={Thumbnail}
+          width={1280}
+          height={720}
+          fps={30}
+          durationInFrames={1}
+          defaultProps={{variant: v}}
+          calculateMetadata={async () => {
+            await ensureFonts();
+            return {};
+          }}
+        />
+      ))}
     </>
   );
 };

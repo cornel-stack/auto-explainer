@@ -1,0 +1,49 @@
+name: manim
+
+# Render manim scenes (transparent webm) and commit them to public/manim/ so the
+# main render can composite them via the Clip component. Run this once (and after
+# editing manim/scenes.py); then reference the clips from a script and render.
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenes:
+        description: 'Space-separated scene names from manim/scenes.py'
+        required: true
+        default: 'OctaneScale KnockCurve'
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: System deps for manim
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg libcairo2-dev libpango1.0-dev \
+            build-essential pkg-config python3-dev
+      - name: Install manim
+        run: pip install "manim==0.18.1"
+      - name: Render scenes (transparent webm)
+        run: |
+          mkdir -p public/manim
+          for S in ${{ github.event.inputs.scenes }}; do
+            manim -qh -t --format=webm --media_dir /tmp/manim manim/scenes.py "$S"
+            find /tmp/manim -name "$S.webm" -exec cp {} "public/manim/$S.webm" \;
+          done
+          ls -lh public/manim/
+      - name: Commit rendered clips
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/manim/*.webm
+          git commit -m "chore(manim): render ${{ github.event.inputs.scenes }}" || echo "no changes"
+          git push
