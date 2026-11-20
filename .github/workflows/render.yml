@@ -103,10 +103,17 @@ jobs:
       - name: Render frames ${{ matrix.shard.start }}-${{ matrix.shard.end }}
         run: |
           mkdir -p out
-          npx remotion render "$SLUG" "out/shard-${{ matrix.shard.index }}.mp4" \
-            --frames=${{ matrix.shard.start }}-${{ matrix.shard.end }} \
-            --props="./videos/$SLUG/.cache/props.json" \
-            --concurrency=4 --gl=swangle
+          # Retry: Chromium occasionally times out connecting on a cold runner.
+          for attempt in 1 2 3; do
+            echo "::group::render attempt $attempt"
+            npx remotion render "$SLUG" "out/shard-${{ matrix.shard.index }}.mp4" \
+              --frames=${{ matrix.shard.start }}-${{ matrix.shard.end }} \
+              --props="./videos/$SLUG/.cache/props.json" \
+              --concurrency=4 --gl=swangle --timeout=120000 && { echo "::endgroup::"; break; }
+            echo "::endgroup::"
+            echo "attempt $attempt failed; retrying in 10s"; sleep 10
+          done
+          test -f "out/shard-${{ matrix.shard.index }}.mp4"
       - uses: actions/upload-artifact@v4
         with:
           name: shard-${{ matrix.shard.index }}
@@ -144,7 +151,10 @@ jobs:
         run: |
           mkdir -p thumbs
           for v in a b c; do
-            npx remotion still "thumb-$SLUG-$v" "thumbs/thumbnail-$v.png"
+            for attempt in 1 2 3; do
+              npx remotion still "thumb-$SLUG-$v" "thumbs/thumbnail-$v.png" --timeout=120000 && break
+              echo "thumb $v attempt $attempt failed; retrying"; sleep 8
+            done
           done
           ls -lh thumbs/
       - uses: actions/upload-artifact@v4
