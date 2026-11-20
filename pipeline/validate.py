@@ -25,6 +25,8 @@ KNOWN_COMPONENTS = {
     "Photo",
     "Illustration",
     "Clip",
+    "FlowLoop",
+    "Timeline",
     "Stage",
 }
 

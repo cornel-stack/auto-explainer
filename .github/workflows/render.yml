@@ -116,6 +116,8 @@ jobs:
   thumbs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      SLUG: ${{ github.event.inputs.slug }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -142,7 +144,7 @@ jobs:
         run: |
           mkdir -p thumbs
           for v in a b c; do
-            npx remotion still "thumbnail-$v" "thumbs/thumbnail-$v.png"
+            npx remotion still "thumb-$SLUG-$v" "thumbs/thumbnail-$v.png"
           done
           ls -lh thumbs/
       - uses: actions/upload-artifact@v4

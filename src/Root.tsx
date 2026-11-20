@@ -5,14 +5,13 @@ import {
   totalFramesFor as howItWorksFrames,
 } from './series/how-it-works';
 import {Cinematic, totalFramesFor as cinematicFrames} from './series/cinematic';
-import {Thumbnail} from './Thumbnail';
+import {Thumbnail, THUMBNAIL_TOPICS, THUMBNAIL_VARIANTS} from './Thumbnail';
 import {CANVAS} from './theme/tokens';
 import {ensureFonts} from './theme/fonts';
-
-const THUMB_VARIANTS = ['a', 'b', 'c'] as const;
 import type {Script, Series, Timing} from './lib/schema';
 import engineScript from '../videos/how-a-car-engine-works/script.json';
 import premiumScript from '../videos/premium-vs-regular-gas/script.json';
+import dieselScript from '../videos/diesel-in-a-gas-car/script.json';
 
 // One series builder per `series` value (Spec §7). Each takes {script, timing}
 // and exposes a matching total-frame estimator for the composition length.
@@ -25,10 +24,10 @@ const BUILDERS: Record<
 > = {
   'how-it-works': {component: HowItWorks, frames: howItWorksFrames},
   versus: {component: Cinematic, frames: cinematicFrames},
+  'what-happens-if': {component: Cinematic, frames: cinematicFrames},
   // Remaining series share the generic builders until their own land.
   'every-x': {component: HowItWorks, frames: howItWorksFrames},
-  'why-does-my-car': {component: HowItWorks, frames: howItWorksFrames},
-  'what-happens-if': {component: HowItWorks, frames: howItWorksFrames},
+  'why-does-my-car': {component: Cinematic, frames: cinematicFrames},
 };
 
 // Every videos/*/script.json registered here becomes a Composition whose id is
@@ -38,6 +37,7 @@ const BUILDERS: Record<
 const SCRIPTS: Script[] = [
   engineScript as unknown as Script,
   premiumScript as unknown as Script,
+  dieselScript as unknown as Script,
 ];
 
 export const RemotionRoot: React.FC = () => {
@@ -74,23 +74,26 @@ export const RemotionRoot: React.FC = () => {
         );
       })}
 
-      {/* Clickbait thumbnails, rendered as stills by CI into the YouTube kit. */}
-      {THUMB_VARIANTS.map((v) => (
-        <Composition
-          key={`thumbnail-${v}`}
-          id={`thumbnail-${v}`}
-          component={Thumbnail}
-          width={1280}
-          height={720}
-          fps={30}
-          durationInFrames={1}
-          defaultProps={{variant: v}}
-          calculateMetadata={async () => {
-            await ensureFonts();
-            return {};
-          }}
-        />
-      ))}
+      {/* Per-topic clickbait thumbnails (id: thumb-<slug>-<variant>), rendered
+          as stills by CI into the YouTube kit. */}
+      {THUMBNAIL_TOPICS.flatMap((topic) =>
+        THUMBNAIL_VARIANTS.map((v) => (
+          <Composition
+            key={`thumb-${topic}-${v}`}
+            id={`thumb-${topic}-${v}`}
+            component={Thumbnail}
+            width={1280}
+            height={720}
+            fps={30}
+            durationInFrames={1}
+            defaultProps={{topic, variant: v}}
+            calculateMetadata={async () => {
+              await ensureFonts();
+              return {};
+            }}
+          />
+        ))
+      )}
     </>
   );
 };

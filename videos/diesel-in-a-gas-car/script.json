@@ -1,0 +1,308 @@
+{
+  "slug": "diesel-in-a-gas-car",
+  "series": "what-happens-if",
+  "title": "Diesel in a Gas Car: What Happens in the First 60 Seconds",
+  "alt_titles": [
+    "I Put Diesel in a Gas Car — Here's Exactly What Happens",
+    "Diesel in a Petrol Car: Will It Destroy the Engine?"
+  ],
+  "keyword": "what happens if you put diesel in a gas car",
+  "target_minutes": 12,
+  "tier": 2,
+  "theme": "dark",
+  "thumbnail": {
+    "mode": "hero",
+    "headline": "DIESEL IN A GAS CAR",
+    "accent": "fault"
+  },
+  "sources": [
+    {
+      "id": "afdc",
+      "title": "U.S. DOE Alternative Fuels Data Center — Fuel Properties (gasoline & diesel)",
+      "url": "https://afdc.energy.gov/fuels/properties"
+    },
+    {
+      "id": "aa-misfuel",
+      "title": "The AA — Putting the wrong fuel in your car (misfuelling advice)",
+      "url": "https://www.theaa.com/breakdown-cover/advice/wrong-fuel"
+    },
+    {
+      "id": "fueleconomy",
+      "title": "fueleconomy.gov (U.S. DOE / EPA) — Fuel basics",
+      "url": "https://www.fueleconomy.gov/feg/"
+    }
+  ],
+  "lexicon": {},
+  "intro": {
+    "narration": "You're half-asleep at the pump, you grab the wrong handle, and you pump diesel straight into your gas car. Don't panic. Here is exactly what happens, second by second, and whether your engine actually survives."
+  },
+  "scenes": [
+    {
+      "id": "t-how",
+      "type": "title",
+      "narration": "Before the damage, the obvious question: how does a mix-up like this even happen?",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "The mix-up",
+          "headline": "How does this even happen?",
+          "headlineAccent": "cyan",
+          "illustrations": [{"src": "diesel/act-think.svg", "x": 1450, "y": 560, "size": 300, "delay": 8}],
+          "peeps": [{"seed": "tired-driver", "x": 320, "y": 540, "size": 320, "delay": 6, "flip": true}]
+        }
+      }
+    },
+    {
+      "id": "misfuel",
+      "type": "beat",
+      "source": "aa-misfuel",
+      "narration": "It is far more common than you would think. In the United Kingdom alone, around one hundred and fifty thousand drivers misfuel every year. That is roughly one every few minutes. It happens because the pumps sit side by side, the labels are small, and you are tired, rushed, or driving an unfamiliar car. It spikes with borrowed cars, rental cars, and drivers who just switched from a diesel they used to own, because muscle memory reaches for the handle they always used. On most pumps the diesel handle is a different colour, usually black or green, but that coding is not universal, it changes from country to country, and a distracted hand does not read colours anyway. The good news is that physics is partly on your side here, and we will see exactly why in a moment. The better news is that if you catch it early, this is usually a cheap mistake rather than a catastrophic one, and knowing what happens in the next sixty seconds is precisely what keeps it that way.",
+      "visual": {
+        "component": "Photo",
+        "props": {
+          "layout": "right",
+          "kicker": "It happens every day",
+          "headline": "One every few minutes",
+          "headlineAccent": "power",
+          "lines": ["Side-by-side pumps, small labels, a tired hand."],
+          "stats": [{"to": 150000, "accent": "power", "label": "UK misfuels / year"}],
+          "heroBox": {"x": 1016, "y": 150, "w": 808, "h": 780},
+          "src": "diesel/01-nozzle.jpg",
+          "credit": "Calle Eklund/V-wolf · CC BY 3.0",
+          "accent": "power",
+          "move": "in"
+        }
+      }
+    },
+    {
+      "id": "two-fuels",
+      "type": "beat",
+      "source": "afdc",
+      "narration": "To understand what goes wrong, you have to see that petrol and diesel are almost opposite liquids. Gasoline is light and volatile. It evaporates easily and flashes into flame from a tiny spark, which is exactly what your gas engine's spark plugs are built to do. Diesel is the opposite: oily, heavy, and slippery, almost like a light lubricating oil. Its flash point is far higher, so it stubbornly refuses to ignite from a spark at all. Instead, a diesel engine squeezes the air so hard it becomes blazing hot, and the fuel ignites from that pressure alone. They are even graded on different scales. Petrol is rated by octane, around 87, while diesel is rated by cetane, around 50. They are not two flavours of the same thing. They are two different tools.",
+      "visual": {
+        "component": "Table",
+        "props": {
+          "layout": "fullbleed",
+          "kicker": "Two opposite liquids",
+          "columns": ["", "Gasoline", "Diesel"],
+          "rows": [
+            {"cells": ["Ignites by", "A spark", "Compression"], "accent": "bar"},
+            {"cells": ["Flash point", "≈ −43 °C", "≈ +52 °C"], "accent": "fault"},
+            {"cells": ["Rated in", "Octane ~87", "Cetane ~50"], "accent": "ok"},
+            {"cells": ["Feel", "Light, volatile", "Oily, lubricating"], "accent": "bar"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "ignition",
+      "type": "beat",
+      "source": "afdc",
+      "narration": "So picture the inside of your cylinder. The spark plug fires, expecting a fine, eager mist of petrol, and instead it gets a cloud of oily diesel that simply will not catch. Remember, diesel is built to ignite from fierce compression, not from a spark, and a petrol engine does not squeeze anywhere near hard enough to light it that way. So the spark just fizzles against it. Combustion becomes weak and incomplete. Some of the diesel burns badly, a lot of it does not burn at all, and it pours out of the exhaust as thick white or grey smoke, which is really a cloud of unburnt fuel. The leftover oil then coats and fouls the spark plugs themselves, so they spark even weaker on the next stroke, and the problem feeds on itself. The engine shudders, misfires, and bleeds away power. It is not exploding or seizing, and that distinction matters. It is simply choking, cylinder by cylinder, on a fuel it was never designed to light.",
+      "visual": {
+        "component": "Engine3D",
+        "props": {
+          "layout": "fullbleed",
+          "kicker": "Spark vs. stubborn fuel",
+          "headline": "The spark can't catch it",
+          "headlineAccent": "power",
+          "layout_hero": "I4",
+          "rpm": 26,
+          "strokesColored": true,
+          "focusCylinder": 0,
+          "camera": "hero"
+        }
+      }
+    },
+    {
+      "id": "t-60s",
+      "type": "title",
+      "narration": "Here is how that actually feels from the driver's seat, from the moment you turn the key.",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "Minute one",
+          "headline": "The first 60 seconds",
+          "headlineAccent": "electric",
+          "illustrations": [{"src": "diesel/act-clock.svg", "x": 1440, "y": 540, "size": 320, "delay": 6}]
+        }
+      }
+    },
+    {
+      "id": "timeline",
+      "type": "beat",
+      "narration": "At first, strangely, nothing seems wrong. When you turn the key, the engine fires up and idles normally, because the fuel lines and the rail are still full of clean petrol from before. For the first several seconds, the car runs on that leftover gasoline. Then the diesel reaches the engine. Within about fifteen seconds the idle turns rough and lumpy. Around thirty seconds the misfiring gets violent, the power collapses, and white smoke starts streaming from the tailpipe. And by about a minute, as the last of the petrol is gone and the cylinders are full of diesel they cannot burn, the engine coughs, stumbles, and stalls, and it will not restart. That whole sequence, from normal to dead, takes roughly one minute.",
+      "visual": {
+        "component": "Timeline",
+        "props": {
+          "layout": "fullbleed",
+          "kicker": "From the driver's seat",
+          "axisLabel": "seconds after you start the engine",
+          "startLabel": "0s",
+          "endLabel": "~60s",
+          "events": [
+            {"at": 0.04, "label": "Starts fine", "sub": "running on leftover petrol", "accent": "ok"},
+            {"at": 0.32, "label": "Runs rough", "sub": "diesel reaches the rail", "accent": "premium"},
+            {"at": 0.62, "label": "Misfire · white smoke", "sub": "unburnt diesel", "accent": "power"},
+            {"at": 0.94, "label": "Stalls", "sub": "won't restart", "accent": "power"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "fuelpath",
+      "type": "beat",
+      "source": "aa-misfuel",
+      "narration": "While that is happening, the diesel is not politely staying in the tank. The fuel pump is pushing it through the entire system. It flows out of the tank, through the lift pump, through the fuel filter, into the high-pressure rail, and finally to the injectors that spray it into each cylinder. Everything it touches gets coated in an oily film. The spark plugs foul, the fuel filter clogs, and the fine injector nozzles gum up with residue that does not want to spray cleanly. This is why the fix is not just emptying the tank. The contaminated fuel has already travelled the whole path, so the lines usually have to be flushed and the system cleaned out from end to end.",
+      "visual": {
+        "component": "FlowLoop",
+        "props": {
+          "layout": "fullbleed",
+          "kicker": "Where the diesel goes",
+          "cleanColor": "fuel",
+          "fault": "injectors",
+          "targetReach": 1,
+          "flow": true
+        }
+      }
+    },
+    {
+      "id": "t-wrecked",
+      "type": "title",
+      "narration": "Which leads to the question everyone actually wants answered.",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "The verdict",
+          "headline": "Is your engine wrecked?",
+          "headlineAccent": "power",
+          "illustrations": [{"src": "diesel/act-warning.svg", "x": 1450, "y": 560, "size": 280, "delay": 6}]
+        }
+      }
+    },
+    {
+      "id": "verdict",
+      "type": "beat",
+      "source": "aa-misfuel",
+      "narration": "And here is the genuinely reassuring part, the thing most panicked drivers get wrong. In a petrol car, diesel almost never causes permanent internal engine damage, as long as you stop quickly. Diesel does not detonate violently, and it does not scour away the lubrication a petrol engine needs, so it will not usually destroy pistons, valves, or bearings. The real enemy here is not the diesel itself. It is you continuing to crank the starter and drive on it. Every extra minute you run the engine pumps more contaminated fuel deeper into the system, fouls more spark plugs, and gums up more of the injectors, turning a simple drain into a proper repair. So the single most important thing to understand is this: the moment you suspect there is diesel in your petrol tank, the damage is still almost entirely avoidable. Whether this stays a cheap inconvenience or becomes an expensive repair is decided almost entirely by what you do in the next few minutes.",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "Good news",
+          "headline": "Usually: no real damage",
+          "headlineAccent": "ok",
+          "lines": ["…if you stop fast. The enemy is driving on it."],
+          "chips": [{"label": "Don't crank it", "accent": "power"}, {"label": "Don't drive it", "accent": "power"}],
+          "peeps": [{"seed": "relieved-driver", "x": 1400, "y": 500, "size": 360, "delay": 10}]
+        }
+      }
+    },
+    {
+      "id": "whattodo",
+      "type": "beat",
+      "source": "aa-misfuel",
+      "narration": "So what do you actually do? If you realise before you have even started the car, perfect: do not turn the key at all, not even to move it off the forecourt. If the engine is already running and misfiring, switch it off as soon as it is safe. Then call for roadside assistance or a tow, and have the car taken to a garage. There, they will drain the contaminated fuel out of the tank, flush the lines, and if needed clean or replace the spark plugs, the fuel filter, and the injectors. The rule is simple and it is the whole video in one line: stop the engine, do not restart it, and get it drained. Do that, and you have turned a disaster into an inconvenience.",
+      "visual": {
+        "component": "Photo",
+        "props": {
+          "layout": "right",
+          "kicker": "The one rule",
+          "headline": "Don't turn the key",
+          "headlineAccent": "power",
+          "lines": ["Don't start it. Don't crank it. Tow it, then drain it."],
+          "illustrations": [{"src": "diesel/act-stop.svg", "x": 150, "y": 560, "size": 240, "delay": 12}],
+          "heroBox": {"x": 1016, "y": 150, "w": 808, "h": 780},
+          "src": "diesel/04-tow.jpg",
+          "credit": "Jelson25 · Public Domain",
+          "accent": "power",
+          "move": "in"
+        }
+      }
+    },
+    {
+      "id": "cost",
+      "type": "beat",
+      "source": "aa-misfuel",
+      "narration": "Let's talk money, because the cost swings enormously depending on how fast you stop. If you catch it right at the pump and never start the engine, it is often just a tank drain and a flush, somewhere around two to six hundred dollars. If you drove a short distance before it stalled, add cleaning the injectors, a new fuel filter, and fresh spark plugs, and the bill climbs into four figures. The pattern is clear: every one of those costs is a direct tax on how long you kept the engine running. But keep that number in your head, because in just a moment you will see the truly frightening figure, the one that comes from making this very same mistake in the opposite direction.",
+      "visual": {
+        "component": "Table",
+        "props": {
+          "layout": "fullbleed",
+          "kicker": "What it costs",
+          "illustrations": [{"src": "diesel/act-wallet.svg", "x": 1700, "y": 110, "size": 160, "delay": 8}],
+          "columns": ["Scenario", "Likely fix", "Rough cost"],
+          "rows": [
+            {"cells": ["Caught at the pump", "Drain the tank", "$200–600"], "accent": "ok"},
+            {"cells": ["Drove, then stalled", "+ filter, plugs, injector clean", "$400–1,200"], "accent": "bar"},
+            {"cells": ["Petrol in a DIESEL", "New pump, rail, injectors", "$8,000+"], "accent": "fault"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "t-reverse",
+      "type": "title",
+      "narration": "Because doing it the other way around is a completely different story.",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "The nightmare version",
+          "headline": "The reverse is far worse",
+          "headlineAccent": "fault"
+        }
+      }
+    },
+    {
+      "id": "reverse",
+      "type": "beat",
+      "source": "aa-misfuel",
+      "narration": "Here is why petrol in a diesel engine is the one you should really fear. A diesel engine relies on the diesel fuel itself to lubricate its precision parts, especially the high-pressure injection pump, which runs at enormous pressure with microscopic, oil-tight clearances. Petrol is a solvent, not a lubricant. The moment it reaches that pump, it washes the protective film away, and suddenly you have metal grinding directly on metal. The pump wears, overheats, and begins shedding tiny metal fragments into the fuel. Those fragments are then carried downstream and blasted into the rail and the injectors, embedding themselves in the very parts that are supposed to meter fuel to a thousandth of a millimetre. Now you are not flushing a system, you are replacing it, piece by contaminated piece. A new high-pressure pump, a new rail, and a full set of injectors, plus the labour to fit them, commonly runs around eight thousand dollars. It is the same careless thirty-second mistake, but in this direction it can write off the entire fuel system.",
+      "visual": {
+        "component": "Photo",
+        "props": {
+          "layout": "left",
+          "kicker": "Petrol in a diesel",
+          "headline": "It eats the pump",
+          "headlineAccent": "fault",
+          "lines": ["Petrol strips the lubrication diesel parts rely on."],
+          "stats": [{"to": 8000, "prefix": "$", "accent": "fault", "label": "typical repair"}],
+          "heroBox": {"x": 96, "y": 150, "w": 808, "h": 780},
+          "src": "diesel/03-injectors.jpg",
+          "credit": "Wikimedia · CC0",
+          "accent": "fault",
+          "move": "in"
+        }
+      }
+    },
+    {
+      "id": "avoid",
+      "type": "beat",
+      "source": "fueleconomy",
+      "narration": "So how do you make sure this never happens to you? First, there is a quiet piece of built-in protection you can lean on. A diesel nozzle is deliberately fatter than a petrol filler neck, so on most cars it physically will not fit into a petrol tank. Sadly, the slimmer petrol nozzle slides easily into a diesel car, which is exactly why petrol-in-diesel is the more common disaster. Second, trust the label, not your memory: the required fuel is printed right inside your fuel filler door. And third, if you ever catch yourself mid-mistake, the rule never changes. Stop pumping, do not start the engine, and get it drained. Thirty seconds of attention at the pump saves you a very expensive afternoon.",
+      "visual": {
+        "component": "Photo",
+        "props": {
+          "layout": "right",
+          "kicker": "How to never do it",
+          "headline": "Read the door",
+          "headlineAccent": "ok",
+          "lines": ["Diesel nozzles don't fit most petrol tanks — but not the reverse."],
+          "heroBox": {"x": 1016, "y": 150, "w": 808, "h": 780},
+          "src": "diesel/02-fuel-door.jpg",
+          "credit": "Nenad Stojkovic · CC BY 2.0",
+          "accent": "ok",
+          "move": "up"
+        }
+      }
+    }
+  ],
+  "outro": {
+    "narration": "So, diesel in a petrol car: usually survivable, if you stop fast and get it drained before you drive on it. Petrol in a diesel: the one that can cost you thousands. Either way, the fix is the same first move, don't turn the key. If this saved you a panic or an expensive mistake, do me a favour and subscribe, and hit the bell, so the next one finds you before the garage does. Next time: do fuel injector cleaners actually do anything, or are they snake oil in a bottle?",
+    "next_slug": "do-fuel-injector-cleaners-work"
+  }
+}

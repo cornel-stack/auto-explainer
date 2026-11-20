@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {ThemeProvider} from '../theme/theme';
 import {StageBackground} from '../theme/StageBackground';
 import {CinematicScene} from '../scenes/cinematic';
@@ -7,7 +7,7 @@ import {Engine3D} from '../components/Engine3D';
 import {Peep} from '../components/Peep/Peep';
 import {CINEMA} from '../theme/cinema';
 import {KineticHeadline, KineticLine, Chip} from '../theme/kinetic';
-import {FONT_MONO} from '../theme/fonts';
+import {FONT_MONO, FONT_SANS} from '../theme/fonts';
 import {getBeat} from '../lib/timing';
 import {synthTiming} from './timingFallback';
 import type {Script, Timing} from '../lib/schema';
@@ -48,16 +48,75 @@ const CineIntro: React.FC<{title: string; hook: string; keyword: string}> = ({ti
   );
 };
 
+const SubscribeCTA: React.FC<{delay?: number}> = ({delay = 30}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const pop = spring({frame: frame - delay, fps, config: {damping: 140, stiffness: 120}, durationInFrames: 16});
+  const pulse = 1 + 0.04 * Math.sin((frame - delay) / fps * 5);
+  const red = '#FF0033';
+  // A ghost "click" ring that sweeps in once to draw the eye.
+  const ring = interpolate(frame - delay - 20, [0, 26], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return (
+    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18, opacity: pop, transform: `translateY(${(1 - pop) * 24}px)`}}>
+      <div style={{fontFamily: FONT_MONO, fontSize: 26, letterSpacing: 4, textTransform: 'uppercase', color: CINEMA.ink2}}>
+        Enjoyed this?
+      </div>
+      <div style={{position: 'relative'}}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 20,
+            background: red,
+            color: '#fff',
+            padding: '24px 48px',
+            borderRadius: 18,
+            fontFamily: FONT_SANS,
+            fontSize: 54,
+            fontWeight: 800,
+            letterSpacing: 1,
+            transform: `scale(${pulse})`,
+            boxShadow: `0 0 50px ${red}88, 0 14px 40px rgba(0,0,0,0.5)`,
+          }}
+        >
+          {/* bell */}
+          <svg width={52} height={52} viewBox="0 0 24 24" fill="#fff">
+            <path d="M12 2a2 2 0 0 1 2 2v.3A7 7 0 0 1 19 11v4l2 2v1H3v-1l2-2v-4a7 7 0 0 1 5-6.7V4a2 2 0 0 1 2-2zm0 20a3 3 0 0 1-3-3h6a3 3 0 0 1-3 3z" />
+          </svg>
+          SUBSCRIBE
+        </div>
+        {/* sweeping click ring + cursor */}
+        {ring > 0 && ring < 1 ? (
+          <div
+            style={{
+              position: 'absolute',
+              inset: -10,
+              borderRadius: 24,
+              border: `4px solid #fff`,
+              opacity: 1 - ring,
+              transform: `scale(${1 + ring * 0.25})`,
+            }}
+          />
+        ) : null}
+      </div>
+      <div style={{fontFamily: FONT_SANS, fontSize: 28, fontWeight: 500, color: CINEMA.ink2}}>
+        and hit the bell so you never miss one.
+      </div>
+    </div>
+  );
+};
+
 const CineOutro: React.FC<{text: string; nextTitle?: string}> = ({text, nextTitle}) => {
   return (
-    <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', padding: 200}}>
-      <div style={{display: 'flex', flexDirection: 'column', gap: 34, alignItems: 'center', textAlign: 'center'}}>
-        <KineticHeadline text={firstSentence(text)} accent="premium" accentWord={firstSentence(text).split(' ').slice(-1)[0]} size={72} align="center" maxWidth={1500} />
-        <KineticLine text={text.slice(firstSentence(text).length).trim()} delay={18} size={34} align="center" />
+    <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', padding: 140}}>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 30, alignItems: 'center', textAlign: 'center'}}>
+        <KineticHeadline text={firstSentence(text)} accent="premium" accentWord={firstSentence(text).split(' ').slice(-1)[0]} size={64} align="center" maxWidth={1500} />
+        <KineticLine text={text.slice(firstSentence(text).length).trim()} delay={16} size={32} align="center" />
+        <SubscribeCTA delay={30} />
         {nextTitle ? (
-          <div style={{marginTop: 20, display: 'flex', gap: 16, alignItems: 'center'}}>
+          <div style={{marginTop: 6, display: 'flex', gap: 16, alignItems: 'center'}}>
             <span style={{fontFamily: FONT_MONO, fontSize: 24, letterSpacing: 3, textTransform: 'uppercase', color: CINEMA.ink3}}>Next</span>
-            <Chip label={nextTitle} accent="cyan" filled delay={26} />
+            <Chip label={nextTitle} accent="cyan" filled delay={44} />
           </div>
         ) : null}
       </div>

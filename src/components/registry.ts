@@ -8,6 +8,8 @@ import {Peep} from './Peep/Peep';
 import {Photo} from './Photo/Photo';
 import {Illustration} from './Illustration/Illustration';
 import {Clip} from './Clip/Clip';
+import {FlowLoop} from './FlowLoop/FlowLoop';
+import {Timeline} from './Timeline/Timeline';
 
 // A no-op hero for text/character-only cinematic scenes.
 const Stage: React.FC<any> = () => null;
@@ -24,6 +26,8 @@ export const COMPONENTS: Record<string, React.FC<any>> = {
   Photo,
   Illustration,
   Clip,
+  FlowLoop,
+  Timeline,
   Stage,
 };
 
