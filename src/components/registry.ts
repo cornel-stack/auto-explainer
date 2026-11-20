@@ -4,6 +4,12 @@ import {Engine3D} from './Engine3D';
 import {Chart} from './Chart';
 import {Table} from './Table';
 import {DecisionTree} from './DecisionTree';
+import {Peep} from './Peep/Peep';
+import {Photo} from './Photo/Photo';
+import {Illustration} from './Illustration/Illustration';
+
+// A no-op hero for text/character-only cinematic scenes.
+const Stage: React.FC<any> = () => null;
 
 // Registry of visual components a scene can name in `visual.component`
 // (Spec §5: validate.py checks every name exists here).
@@ -13,6 +19,10 @@ export const COMPONENTS: Record<string, React.FC<any>> = {
   Chart,
   Table,
   DecisionTree,
+  Peep,
+  Photo,
+  Illustration,
+  Stage,
 };
 
 // Components that render a Three.js scene (callouts are projected, not placed

@@ -15,7 +15,17 @@ import sys
 from pathlib import Path
 
 # Mirrors src/components/registry.ts — update both together.
-KNOWN_COMPONENTS = {"Engine", "Engine3D", "Chart", "Table", "DecisionTree"}
+KNOWN_COMPONENTS = {
+    "Engine",
+    "Engine3D",
+    "Chart",
+    "Table",
+    "DecisionTree",
+    "Peep",
+    "Photo",
+    "Illustration",
+    "Stage",
+}
 
 WORDS_PER_MIN = 150
 MIN_WORDS = {"mechanism": 90, "beat": 90, "item": 35}
@@ -81,15 +91,15 @@ def main() -> int:
                 f"scene '{sid}': narration {n} words < {floor} required for type '{sc.get('type')}'"
             )
 
-        # `title` scenes are chrome-only and carry no visual; every other scene
-        # must name a registered component.
-        if sc.get("type") == "title":
-            if sc.get("visual"):
-                errors.append(f"scene '{sid}': title scenes must not have a visual")
-        else:
-            comp = sc.get("visual", {}).get("component")
+        # Non-title scenes must name a visual; title scenes may omit it. Any
+        # visual present must resolve to a registered component.
+        visual = sc.get("visual")
+        if visual is not None:
+            comp = visual.get("component")
             if comp not in KNOWN_COMPONENTS:
                 errors.append(f"scene '{sid}': unknown visual.component '{comp}'")
+        elif sc.get("type") != "title":
+            errors.append(f"scene '{sid}': missing visual")
 
         if sc.get("source") and sc["source"] not in source_ids:
             errors.append(f"scene '{sid}': source '{sc['source']}' not in sources[]")

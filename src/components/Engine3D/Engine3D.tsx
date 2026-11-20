@@ -40,7 +40,15 @@ export interface Engine3DProps extends EngineProps {
   camera?: CameraPreset;
   cutaway?: number; // 0 closed … 1 fully open (front removed)
   beatFrames?: number;
+  knock?: boolean; // show violent pre-ignition (auto-ignition before the spark)
 }
+
+// Raised-cosine pulse, wrapped on the 720° four-stroke cycle.
+const pulse720 = (phi: number, center: number, half: number): number => {
+  let d = ((phi - center + 360) % 720) - 360;
+  if (Math.abs(d) >= half) return 0;
+  return 0.5 * (1 + Math.cos((Math.PI * d) / half));
+};
 
 // Orient a cylinder mesh to span from->to.
 const Segment: React.FC<{
@@ -295,6 +303,40 @@ const EngineSceneInner: React.FC<Engine3DProps> = (props) => {
                 />
               </mesh>
             ) : null}
+
+            {/* Knock: a second flame front auto-ignites during late compression,
+                early and off-centre, colliding with the spark front — rendered
+                as jittery red flashes against the bore wall. */}
+            {(() => {
+              if (!props.knock || crankGhost) return null;
+              const jitter = 0.5 + 0.5 * Math.sin(frame * 2.7 + c.index);
+              const k = pulse720(c.phi, 322, 36) * jitter;
+              if (k < 0.05) return null;
+              return (
+                <group>
+                  <mesh position={[x + BORE_R * 0.55, crownY + 0.22, BORE_R * 0.4]}>
+                    <sphereGeometry args={[0.1 + 0.26 * k, 14, 14]} />
+                    <meshStandardMaterial
+                      color={'#FF7A3C'}
+                      emissive={COLORS.fault}
+                      emissiveIntensity={2.6 * k}
+                      transparent
+                      opacity={0.92 * k}
+                    />
+                  </mesh>
+                  <mesh position={[x - BORE_R * 0.4, crownY + 0.14, -BORE_R * 0.3]}>
+                    <sphereGeometry args={[0.07 + 0.18 * k, 12, 12]} />
+                    <meshStandardMaterial
+                      color={COLORS.electric}
+                      emissive={'#FFC14D'}
+                      emissiveIntensity={2.2 * k}
+                      transparent
+                      opacity={0.85 * k}
+                    />
+                  </mesh>
+                </group>
+              );
+            })()}
           </group>
         );
       })}

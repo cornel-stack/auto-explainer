@@ -7,9 +7,9 @@
     "Is Premium Gas Worth It? What the Testing Really Shows"
   ],
   "keyword": "premium vs regular gas",
-  "target_minutes": 8,
-  "tier": 1,
-  "theme": "light",
+  "target_minutes": 13,
+  "tier": 2,
+  "theme": "dark",
   "thumbnail": {
     "mode": "hero",
     "headline": "PREMIUM VS REGULAR",
@@ -41,91 +41,168 @@
   },
   "scenes": [
     {
-      "id": "t-octane",
+      "id": "t-what-is-octane",
       "type": "title",
-      "title": "What ‘octane’ actually measures",
-      "narration": "First, forget the marketing for a moment. Let us be precise about what that number on the pump is really telling you."
+      "narration": "To answer it properly, we have to start with one number, and what it actually means.",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "The question",
+          "headline": "First — what is octane?",
+          "headlineAccent": "premium",
+          "illustrations": [{"src": "pvr/act-question.svg", "x": 1460, "y": 560, "size": 300, "delay": 8}],
+          "peeps": [{"seed": "curious-driver", "x": 300, "y": 540, "size": 320, "delay": 6, "flip": true}]
+        }
+      }
+    },
+    {
+      "id": "pump-choice",
+      "type": "beat",
+      "source": "fueleconomy",
+      "narration": "This is the moment the whole question lives in. Three grades on one pump, and a price gap that feels like it has to mean something. Marketing has spent decades teaching you that premium is the treat, the reward, the good stuff. But those buttons are not ranked from worst to best. They are just different octane ratings, and octane is a far stranger, far more specific thing than the word premium suggests. Before you spend a cent more, you need to know exactly what that number is measuring, because almost everyone guesses wrong.",
+      "visual": {
+        "component": "Photo",
+        "props": {
+          "layout": "right",
+          "kicker": "At the pump",
+          "headline": "Three buttons, one myth",
+          "headlineAccent": "cyan",
+          "lines": ["\"Premium\" sounds like a grade. It isn't."],
+          "chips": [{"label": "87 Regular", "accent": "fuel"}, {"label": "89 Mid", "accent": "cyan"}, {"label": "93 Premium", "accent": "premium"}],
+          "heroBox": {"x": 1016, "y": 150, "w": 808, "h": 780},
+          "src": "pvr/01-pump-selector.jpg",
+          "credit": "Photo: Tysto · Public Domain",
+          "accent": "premium",
+          "move": "in"
+        }
+      }
     },
     {
       "id": "octane-meaning",
-      "type": "compare",
-      "section": "What octane measures",
+      "type": "beat",
       "source": "fueleconomy",
-      "narration": "Start with the number itself. Octane is not a measure of power, energy, or cleanliness. It is simply a fuel's resistance to burning before it is supposed to. On this scale, plain heptane, which ignites far too easily, sits near zero, and iso-octane, which resists it, sits at one hundred. The pump number, like 87 or 91, tells you how close your fuel behaves to that knock-resistant end. In North America this figure is the anti-knock index, or AKI. A regular 87 and a premium 91 hold exactly the same energy and will make the same power in the same engine. The only thing a higher number buys you is a fuel that can be squeezed harder and heated more without lighting itself. That resistance is the entire product. Everything else on the sign is marketing.",
+      "narration": "Octane is not a measure of power, energy, or cleanliness. It is simply a fuel's resistance to burning before it is supposed to. Picture two reference fuels. Heptane ignites far too easily under pressure, so it sits at zero. Iso-octane resists it beautifully, so it sits at one hundred. The number on the pump just tells you how closely your fuel behaves like that knock-resistant end of the scale. In North America that figure is called the anti-knock index, or AKI. Here is the part that stuns people: a regular 87 and a premium 91 hold essentially the same energy, and in the same engine they make the same power. The only thing the higher number buys you is a fuel that can be squeezed harder and heated more without lighting itself early.",
       "visual": {
-        "component": "Engine",
+        "component": "Engine3D",
         "props": {
-          "columns": [
-            {
-              "label": "Regular · 87",
-              "sub": "ordinary fuel",
-              "accent": "fuel",
-              "props": {"layout": "I4", "rpm": 26, "strokesColored": true, "focusCylinder": 0}
-            },
-            {
-              "label": "Premium · 91+",
-              "sub": "knock-resistant fuel",
-              "accent": "bar",
-              "props": {"layout": "I4", "rpm": 26, "strokesColored": true, "focusCylinder": 0}
-            }
-          ]
+          "layout": "fullbleed",
+          "kicker": "What octane measures",
+          "headline": "Resistance, not power",
+          "headlineAccent": "premium",
+          "chips": [{"label": "Heptane = 0", "accent": "power"}, {"label": "Iso-octane = 100", "accent": "ok"}],
+          "layout_hero": "I4",
+          "rpm": 30,
+          "strokesColored": true,
+          "focusCylinder": 0,
+          "camera": "orbit"
         }
-      },
-      "specs": [
-        {"label": "Regular", "value": "87 AKI"},
-        {"label": "Premium", "value": "91+ AKI"},
-        {"label": "Energy gap", "value": "≈ 0%", "emphasis": "ok"}
-      ]
+      }
     },
     {
-      "id": "knock",
+      "id": "octane-sticker",
       "type": "beat",
-      "section": "Knock, drawn",
       "source": "fueleconomy",
-      "narration": "So what is this knock the fuel is resisting? Follow the pressure inside one cylinder as the piston rises. Normally, the mixture waits, calmly compressed, until the spark plug fires near the top, and then it burns in one smooth, controlled front. That gives this gentle curve, peaking just after the piston turns over. But if the fuel is too eager for the pressure it is under, it ignites on its own, early, in the wrong place. Two flame fronts collide, and the pressure spikes violently, hammering the piston and the bearings. That is the sharp overshoot you see here, and the metallic pinging you would hear from under the hood. Keep it up for long enough, and it genuinely destroys pistons. Higher-octane fuel simply refuses to auto-ignite under that squeeze, which is the whole reason the number exists.",
+      "narration": "You have seen this label a thousand times without reading it. That little yellow sticker on the pump is where the number is defined. It says the minimum octane rating by the R plus M over two method, which simply means they test the fuel two different ways and average the results. That average is the AKI number you pay for. Regular is usually 87, mid grade around 89, and premium 91 to 93. None of that tells you which one your car wants. For that, the fuel is only half the story. The other half is the engine it goes into.",
+      "visual": {
+        "component": "Photo",
+        "props": {
+          "layout": "left",
+          "kicker": "The label, decoded",
+          "headline": "(R + M) ÷ 2",
+          "headlineAccent": "cyan",
+          "lines": ["The anti-knock index, averaged from two tests."],
+          "lowerThirds": [{"title": "Regular", "value": "87", "accent": "fuel"}, {"title": "Premium", "value": "91–93", "accent": "premium"}],
+          "heroBox": {"x": 96, "y": 150, "w": 808, "h": 780},
+          "src": "pvr/02-octane-sticker.jpg",
+          "credit": "Chris Yarzab · CC BY 2.0",
+          "accent": "premium",
+          "move": "left"
+        }
+      }
+    },
+    {
+      "id": "t-knock",
+      "type": "title",
+      "narration": "That early, unwanted ignition has a name, and it is the whole reason octane exists.",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "The enemy",
+          "headline": "So what is knock?",
+          "headlineAccent": "power",
+          "peeps": [{"seed": "worried-driver", "x": 1420, "y": 520, "size": 360, "delay": 6}]
+        }
+      }
+    },
+    {
+      "id": "knock-3d",
+      "type": "beat",
+      "source": "fueleconomy",
+      "narration": "Follow a single cylinder. On the compression stroke, the piston rises and squeezes the fuel and air into a tiny, hot space, and normally the mixture waits, patiently, until the spark plug fires near the top. But if the fuel is too eager for the pressure it is under, it ignites on its own, early, before the spark, in the wrong place. Now two flame fronts race toward each other and collide. The pressure spikes violently and slams the piston while it is still trying to come up. That collision is knocking, and those red flashes are it happening. Do it hard enough, for long enough, and it will crack pistons and hammer the bearings flat. Higher-octane fuel simply refuses to light under that squeeze. That refusal is the entire product you are buying.",
+      "visual": {
+        "component": "Engine3D",
+        "props": {
+          "layout": "fullbleed",
+          "kicker": "Knock, in 3D",
+          "headline": "Two flame fronts collide",
+          "headlineAccent": "power",
+          "layout_hero": "I4",
+          "rpm": 24,
+          "strokesColored": true,
+          "focusCylinder": 0,
+          "camera": "hero",
+          "knock": true
+        }
+      }
+    },
+    {
+      "id": "knock-curve",
+      "type": "beat",
+      "source": "fueleconomy",
+      "narration": "Here is the same event as a pressure trace, the way an engineer would see it. The calm green line is a normal, spark-timed burn: pressure rises smoothly and peaks just after the piston turns over at the top. The red line is knock. The fuel auto-ignites early, and the pressure spikes in a sharp, jagged overshoot, well before it should. That spike is the hammer blow. It is also the metallic pinging sound you would hear from under the hood on a hot day climbing a hill. Everything premium fuel does for an engine comes down to flattening that red spike back into the smooth green curve.",
       "visual": {
         "component": "Chart",
         "props": {
+          "layout": "fullbleed",
+          "kicker": "Cylinder pressure",
+          "illustrations": [{"src": "pvr/act-bulb.svg", "x": 1680, "y": 120, "size": 170, "delay": 10, "float": true}],
           "mode": "curve",
           "xLabel": "Crank angle →",
           "yLabel": "Cylinder pressure",
           "curves": [
-            {
-              "label": "Controlled burn",
-              "color": "ok",
-              "points": [[0, 0.08], [0.2, 0.12], [0.4, 0.22], [0.5, 0.42], [0.58, 0.62], [0.66, 0.55], [0.8, 0.34], [1, 0.18]],
-              "markers": [{"x": 0.5, "y": 0.42, "label": "Spark"}]
-            },
-            {
-              "label": "Knock",
-              "color": "fault",
-              "dashed": true,
-              "points": [[0, 0.08], [0.2, 0.12], [0.4, 0.22], [0.5, 0.44], [0.55, 0.9], [0.58, 0.55], [0.61, 0.78], [0.64, 0.5], [0.7, 0.6], [0.8, 0.36], [1, 0.2]],
-              "markers": [{"x": 0.55, "y": 0.9, "label": "Auto-ignition"}]
-            }
+            {"label": "Controlled burn", "color": "ok", "points": [[0, 0.08], [0.2, 0.12], [0.4, 0.22], [0.5, 0.42], [0.58, 0.62], [0.66, 0.55], [0.8, 0.34], [1, 0.18]], "markers": [{"x": 0.5, "y": 0.42, "label": "Spark"}]},
+            {"label": "Knock", "color": "fault", "dashed": true, "points": [[0, 0.08], [0.2, 0.12], [0.4, 0.22], [0.5, 0.44], [0.55, 0.9], [0.58, 0.55], [0.61, 0.78], [0.64, 0.5], [0.7, 0.6], [0.8, 0.36], [1, 0.2]], "markers": [{"x": 0.55, "y": 0.9, "label": "Auto-ignition"}]}
           ]
         }
-      },
-      "specs": [
-        {"label": "Normal", "value": "spark-timed burn", "emphasis": "ok"},
-        {"label": "Knock", "value": "pressure spike", "emphasis": "fault"}
-      ]
+      }
     },
     {
-      "id": "t-worth",
+      "id": "t-who-needs",
       "type": "title",
-      "title": "So when is premium worth it?",
-      "narration": "There is exactly one situation where paying more genuinely helps. Here is who the fuel is really for, and why."
+      "narration": "Which brings us to the only question that actually decides your answer.",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "The real test",
+          "headline": "Who actually needs premium?",
+          "headlineAccent": "cyan",
+          "illustrations": [{"src": "pvr/act-driving.svg", "x": 1440, "y": 540, "size": 360, "delay": 6}]
+        }
+      }
     },
     {
       "id": "compression",
       "type": "beat",
-      "section": "Who actually needs premium",
       "source": "fueleconomy",
-      "narration": "Now, who actually needs that resistance? It comes down to how hard an engine squeezes its fuel. An ordinary family engine runs a compression ratio around ten to one, gentle enough that regular fuel never gets close to lighting itself early. But performance engines, and almost anything with a turbocharger, pack the mixture far tighter, around twelve to one or beyond, and then force even more air in on top. Under that kind of pressure, regular fuel would knock, so these engines are designed from the very start to require the knock resistance of premium. The rule is simple: the higher the compression and the boost, the higher the octane the engine genuinely needs. A low-compression engine gains nothing from premium, because it was never going to knock on regular in the first place.",
+      "narration": "It comes down to how hard an engine squeezes. An ordinary family engine runs a compression ratio around ten to one, gentle enough that regular fuel never comes close to lighting itself early. But performance engines, and almost anything with a turbocharger, pack the mixture far tighter, around twelve to one or beyond, and then cram even more air in on top of that. Under that kind of pressure, regular fuel would knock, so these engines are designed from the very first sketch to require the knock resistance of premium. The rule is wonderfully simple: the higher the compression and the boost, the more octane the engine genuinely needs. A low-compression engine gains nothing from premium, because it was never going to knock in the first place.",
       "visual": {
         "component": "Chart",
         "props": {
+          "layout": "fullbleed",
+          "kicker": "Compression ratio",
           "mode": "bars",
           "max": 15,
           "bars": [
@@ -133,21 +210,41 @@
             {"label": "Performance / turbo", "value": 13, "note": "≈ 12 : 1+", "color": "bar"}
           ]
         }
-      },
-      "specs": [
-        {"label": "Everyday", "value": "≈ 10:1 → 87"},
-        {"label": "Turbo / sport", "value": "≈ 12:1 → 91+", "emphasis": "bar"}
-      ]
+      }
+    },
+    {
+      "id": "turbo-photo",
+      "type": "beat",
+      "source": "fueleconomy",
+      "narration": "This is why the turbocharger is the giveaway. A turbo exists to force extra air into the cylinder, which means even more mixture squeezed into the same space, and even more pressure for the fuel to resist. That is exactly the condition that causes knock. So turbocharged and high-performance engines are the ones whose manuals actually say premium is required. If your car has a small, efficient, naturally aspirated engine, none of this pressure drama is happening inside it, and the premium button is doing nothing for you at all.",
+      "visual": {
+        "component": "Photo",
+        "props": {
+          "layout": "right",
+          "kicker": "The giveaway",
+          "headline": "Boost needs octane",
+          "headlineAccent": "power",
+          "lines": ["Turbos cram in more air — more pressure to resist."],
+          "chips": [{"label": "Turbo", "accent": "power"}, {"label": "High compression", "accent": "premium"}],
+          "heroBox": {"x": 1016, "y": 150, "w": 808, "h": 780},
+          "src": "pvr/04-turbocharger.jpg",
+          "credit": "NASA · Public Domain",
+          "accent": "power",
+          "move": "in"
+        }
+      }
     },
     {
       "id": "timing-advance",
       "type": "beat",
-      "section": "Same fuel, a little more",
       "source": "fueleconomy",
-      "narration": "Here is the one real mechanism behind premium's reputation. In an engine built for it, the computer listens for knock and can push the ignition timing earlier when it detects knock-resistant fuel. The air and the fuel going in stay exactly the same, but firing a touch sooner extracts slightly more work from the same burn, which shows up as a little more power and a little better economy. The key words there are built for it. If your engine's computer is already running its full timing on regular, there is no extra timing left to unlock, and premium changes nothing at all. The gain is real only where the engineers deliberately left room for it, and even then, as we are about to see, it is surprisingly small.",
+      "narration": "Now, there is one real mechanism behind premium's reputation, and it is worth understanding honestly. In an engine built for it, the computer is always listening for knock, and when it senses knock-resistant fuel it can advance the ignition timing, firing a little earlier. The air and the fuel going in stay exactly the same, but firing sooner squeezes a bit more useful work out of the same burn. That shows up as slightly more power and slightly better economy. But notice the condition: built for it. If your engine is already running its full timing on regular, there is no extra timing to unlock, and premium changes nothing. The gain only exists where the engineers deliberately left room for it.",
       "visual": {
         "component": "Chart",
         "props": {
+          "layout": "fullbleed",
+          "kicker": "Same fuel, a little more",
+          "illustrations": [{"src": "pvr/act-bulb.svg", "x": 1680, "y": 120, "size": 180, "delay": 8}],
           "mode": "bars",
           "max": 115,
           "bars": [
@@ -157,21 +254,34 @@
             {"label": "Power · premium", "value": 104, "note": "a little more", "color": "bar"}
           ]
         }
-      },
-      "specs": [
-        {"label": "Air & fuel", "value": "unchanged"},
-        {"label": "Timing", "value": "advanced", "emphasis": "bar"}
-      ]
+      }
+    },
+    {
+      "id": "t-testing",
+      "type": "title",
+      "narration": "So the benefit is real for some engines. The only question left is how big it actually is.",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "The evidence",
+          "headline": "What the testing found",
+          "headlineAccent": "power",
+          "illustrations": [{"src": "pvr/act-wallet.svg", "x": 1450, "y": 560, "size": 300, "delay": 6}]
+        }
+      }
     },
     {
       "id": "aaa-data",
       "type": "beat",
-      "section": "What the testing found",
       "source": "aaa-2016",
-      "narration": "And how big is small? The American Automobile Association put this to the test, both on a dynamometer and out on the road. Even in the engines that can take advantage of premium, they measured only a few percent more power and a few percent better fuel economy, gains on the order of two or three percent. Meanwhile premium costs you roughly twenty to twenty-five percent more at every fill. Put bluntly, you pay a quarter more to get a fortieth back. And for every car that does not even require it, the benefit rounds straight down to zero. Add it all up across the country, and the Association estimated that drivers waste about two point one billion dollars a year buying premium their engines simply cannot use.",
+      "narration": "The American Automobile Association put this to the test, on a dynamometer and out on real roads. Even in the engines that can take advantage of premium, they measured only a few percent more power and a few percent better fuel economy, gains on the order of two or three percent. Meanwhile premium costs you roughly twenty to twenty-five percent more at every single fill. Put bluntly, you pay about a quarter more to get a fortieth back. And for every car that does not even require it, that benefit rounds straight down to zero. Add it up across the whole country, and the Association estimated that drivers waste around two point one billion dollars a year buying premium their engines simply cannot use.",
       "visual": {
         "component": "Chart",
         "props": {
+          "layout": "fullbleed",
+          "kicker": "Gains vs. cost",
+          "illustrations": [{"src": "pvr/act-wallet.svg", "x": 1690, "y": 120, "size": 170, "delay": 8}],
           "mode": "bars",
           "max": 26,
           "unit": "%",
@@ -181,28 +291,55 @@
             {"label": "Extra you pay", "value": 22, "note": "+20–25%", "color": "fault"}
           ]
         }
-      },
-      "specs": [
-        {"label": "You gain", "value": "≈ 2–3%", "emphasis": "ok"},
-        {"label": "You pay", "value": "+20–25%", "emphasis": "fault"},
-        {"label": "Wasted / yr", "value": "$2.1B", "emphasis": "fault"}
-      ]
+      }
     },
     {
-      "id": "t-buy",
+      "id": "price-photo",
+      "type": "beat",
+      "source": "aaa-2016",
+      "narration": "Stand in front of the price sign and do that math for yourself. The jump from regular to premium is routinely twenty to twenty-five percent per litre. The jump in how your engine actually runs, if it even benefits, is two or three percent. Those two numbers are not close. One is almost ten times the other, and you are on the wrong side of it. That gap, multiplied by millions of unnecessary fill-ups every week, is where the two billion dollars quietly disappears. It is one of the most expensive habits in all of driving, and for most cars it buys you absolutely nothing you can feel, measure, or ever get back.",
+      "visual": {
+        "component": "Photo",
+        "props": {
+          "layout": "left",
+          "kicker": "The stake",
+          "headline": "A quarter more to pay",
+          "headlineAccent": "power",
+          "stats": [{"to": 2.1, "prefix": "$", "suffix": "B", "decimals": 1, "accent": "power", "label": "wasted / year"}],
+          "heroBox": {"x": 96, "y": 150, "w": 808, "h": 780},
+          "src": "pvr/05-price-sign.jpg",
+          "credit": "DanTD · CC BY 4.0",
+          "accent": "power",
+          "move": "up"
+        }
+      }
+    },
+    {
+      "id": "t-which",
       "type": "title",
-      "title": "So, which should you buy?",
-      "narration": "Enough theory. Here is how to get this right, every single time you fill up, in about three seconds."
+      "narration": "Enough theory. Here is how to be right, every single time you fill up.",
+      "visual": {
+        "component": "Stage",
+        "props": {
+          "layout": "center",
+          "kicker": "The payoff",
+          "headline": "So, which should you buy?",
+          "headlineAccent": "ok",
+          "peeps": [{"seed": "confident-driver", "x": 1420, "y": 520, "size": 360, "delay": 6}]
+        }
+      }
     },
     {
       "id": "verdicts",
       "type": "beat",
-      "section": "The three verdicts",
       "source": "fueleconomy",
-      "narration": "Let us turn all of that into a decision you can make standing at the pump. There are really only three cases to worry about. If your owner's manual says that premium is required, then buy premium, because your engine will genuinely knock and suffer without it. If the manual says that premium is merely recommended, then regular is completely fine, and the gain is far too small to justify the price difference. And if your manual never mentions premium at all, buy regular with total confidence, because premium will do absolutely nothing for an engine that was tuned for the ordinary stuff.",
+      "narration": "It collapses into three simple cases. If your owner's manual says premium is required, buy premium, because your engine really will knock and suffer without it. If the manual says premium is merely recommended, regular is completely fine, and the gain is far too small to justify the price. And if your manual never mentions premium at all, buy regular with total confidence, because premium does nothing for an engine that was tuned for the ordinary stuff. Required, recommended, or silent. That one word in your manual is the entire decision.",
       "visual": {
         "component": "Table",
         "props": {
+          "layout": "fullbleed",
+          "kicker": "The three verdicts",
+          "illustrations": [{"src": "pvr/act-reading.svg", "x": 1700, "y": 110, "size": 160, "delay": 8}],
           "columns": ["Your manual says", "Do this", "Because"],
           "rows": [
             {"cells": ["Premium required", "Buy premium", "It will knock on regular"], "accent": "fault"},
@@ -215,12 +352,13 @@
     {
       "id": "find-your-number",
       "type": "beat",
-      "section": "Find your number",
       "source": "fueleconomy",
-      "narration": "The best part is that your car already tells you the answer, in two easy places. Open the owner's manual to the fuel section, and look inside the fuel filler door, where the required or recommended grade is almost always printed in plain sight. If either one says premium is required, use ninety-one or higher. If it only says recommended, then regular, at eighty-seven, will run the engine perfectly happily. And if all you find is the word regular, or nothing about octane at all, then eighty-seven is exactly the number the engineers already chose for you. Trust that printed number over any hunch or any helpful voice at the pump.",
+      "narration": "And the best part is that your car already told you the answer, in two places you can check in seconds. Open the owner's manual to the fuel section, and look inside the fuel filler door, where the required or recommended grade is almost always printed. If it says premium is required, use ninety-one or higher. If it only says recommended, regular at eighty-seven will run the engine perfectly happily. And if all you find is the word regular, or nothing about octane at all, then eighty-seven is exactly the number the engineers already chose for you.",
       "visual": {
         "component": "DecisionTree",
         "props": {
+          "layout": "fullbleed",
+          "kicker": "Find your number",
           "root": "Check the manual & fuel door",
           "branches": [
             {"condition": "“Premium required”", "outcome": "Use 91+", "accent": "fault"},
@@ -231,14 +369,36 @@
       }
     },
     {
+      "id": "fuel-cap-photo",
+      "type": "beat",
+      "source": "ftc-premium",
+      "narration": "So before you ever trust a hunch at the pump again, trust this instead. The answer is printed right here, on the inside of the little door you open at every single fill-up, and in the first few pages of the manual sitting in your glovebox. It costs nothing to check, it takes about thirty seconds, and it settles the argument forever. No guessing, no marketing, no quiet voice telling you the expensive one must somehow be better. The engineers who designed your car already did all of the thinking for you, and they wrote the answer down. All you have to do is open the door, find the number, and buy exactly that.",
+      "visual": {
+        "component": "Photo",
+        "props": {
+          "layout": "right",
+          "kicker": "It's written down",
+          "headline": "The door tells you",
+          "headlineAccent": "ok",
+          "lines": ["Owner's manual + fuel filler door. Thirty seconds."],
+          "heroBox": {"x": 1016, "y": 150, "w": 808, "h": 780},
+          "src": "pvr/03-fuel-cap.jpg",
+          "credit": "CZmarlin · CC0",
+          "accent": "ok",
+          "move": "in"
+        }
+      }
+    },
+    {
       "id": "ron-aki",
       "type": "beat",
-      "section": "Outside North America",
       "source": "fueleconomy",
-      "narration": "One last thing, if you are watching from outside North America. The pump number is not the same everywhere, and it trips people up constantly. The United States and Canada post the anti-knock index, AKI, which is the average of two separate lab tests. Much of the rest of the world, including the United Kingdom, Europe, and Australia, posts the research octane number, RON, which always reads higher for the very same fuel. So do not panic at a 95 on a British pump. An American 87 is roughly a 91 RON, and American premium, 91 to 93, lines up with about 95 to 98 RON. Match whatever your own manual asks for, in your own country's units, and every bit of the logic we just covered still holds.",
+      "narration": "One last thing, if you are watching from outside North America, because the number is not the same everywhere and it trips people up constantly. The United States and Canada post the anti-knock index, AKI, the average of two lab tests. Much of the rest of the world, including the United Kingdom, Europe, and Australia, posts the research octane number, RON, which always reads higher for the very same fuel. So do not panic at a 95 on a British pump. An American 87 is roughly a 91 RON, and American premium, 91 to 93, lines up with about 95 to 98 RON. Match whatever your own manual asks for, in your own country's units, and every bit of the logic still holds.",
       "visual": {
         "component": "Table",
         "props": {
+          "layout": "fullbleed",
+          "kicker": "Outside North America",
           "columns": ["US & Canada · AKI", "UK · EU · AU · RON", "Grade"],
           "rows": [
             {"cells": ["87", "91", "Regular"], "accent": "ok"},

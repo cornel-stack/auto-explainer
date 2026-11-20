@@ -4,7 +4,7 @@ import {
   HowItWorks,
   totalFramesFor as howItWorksFrames,
 } from './series/how-it-works';
-import {Versus, totalFramesFor as versusFrames} from './series/versus';
+import {Cinematic, totalFramesFor as cinematicFrames} from './series/cinematic';
 import {CANVAS} from './theme/tokens';
 import {ensureFonts} from './theme/fonts';
 import type {Script, Series, Timing} from './lib/schema';
@@ -21,7 +21,7 @@ const BUILDERS: Record<
   }
 > = {
   'how-it-works': {component: HowItWorks, frames: howItWorksFrames},
-  versus: {component: Versus, frames: versusFrames},
+  versus: {component: Cinematic, frames: cinematicFrames},
   // Remaining series share the generic builders until their own land.
   'every-x': {component: HowItWorks, frames: howItWorksFrames},
   'why-does-my-car': {component: HowItWorks, frames: howItWorksFrames},

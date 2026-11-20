@@ -27,7 +27,9 @@ export type CameraPreset =
   | 'cylinder'
   | 'valvetrain'
   | 'recap'
-  | 'intro';
+  | 'intro'
+  | 'orbit'
+  | 'hero';
 
 // Camera position + target per beat. `t01` is 0..1 progress through the beat
 // for a slow, living drift.
@@ -56,6 +58,16 @@ export const cameraFor = (
     }
     case 'intro':
       return {pos: [6.5 + drift, 4.8, 14], target: [0, 3.0, 0], fov: 33};
+    case 'orbit': {
+      // Continuous slow cinematic orbit around the whole engine.
+      const a = t01 * Math.PI * 1.4 - 0.5;
+      return {pos: [Math.sin(a) * 12.5, 5.2 + drift, Math.cos(a) * 12.5], target: [0, 3.0, 0], fov: 34};
+    }
+    case 'hero': {
+      // Low, close three-quarter hero push toward one cylinder.
+      const push = 11 - t01 * 1.6;
+      return {pos: [fx + 4.6, 2.4 + drift, push], target: [fx, 2.9, 0], fov: 36};
+    }
     case 'wide':
     default:
       return {pos: [8 + drift, 5.6, 13], target: [0, 3.1, 0], fov: 35};
