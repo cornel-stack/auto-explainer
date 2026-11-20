@@ -1,12 +1,18 @@
 import React from 'react';
 import {Engine, engineAnchors} from './Engine';
 import {Engine3D} from './Engine3D';
+import {Chart} from './Chart';
+import {Table} from './Table';
+import {DecisionTree} from './DecisionTree';
 
 // Registry of visual components a scene can name in `visual.component`
 // (Spec §5: validate.py checks every name exists here).
 export const COMPONENTS: Record<string, React.FC<any>> = {
   Engine,
   Engine3D,
+  Chart,
+  Table,
+  DecisionTree,
 };
 
 // Components that render a Three.js scene (callouts are projected, not placed

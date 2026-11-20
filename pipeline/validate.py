@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 # Mirrors src/components/registry.ts — update both together.
-KNOWN_COMPONENTS = {"Engine", "Engine3D"}
+KNOWN_COMPONENTS = {"Engine", "Engine3D", "Chart", "Table", "DecisionTree"}
 
 WORDS_PER_MIN = 150
 MIN_WORDS = {"mechanism": 90, "beat": 90, "item": 35}
@@ -81,9 +81,15 @@ def main() -> int:
                 f"scene '{sid}': narration {n} words < {floor} required for type '{sc.get('type')}'"
             )
 
-        comp = sc.get("visual", {}).get("component")
-        if comp not in KNOWN_COMPONENTS:
-            errors.append(f"scene '{sid}': unknown visual.component '{comp}'")
+        # `title` scenes are chrome-only and carry no visual; every other scene
+        # must name a registered component.
+        if sc.get("type") == "title":
+            if sc.get("visual"):
+                errors.append(f"scene '{sid}': title scenes must not have a visual")
+        else:
+            comp = sc.get("visual", {}).get("component")
+            if comp not in KNOWN_COMPONENTS:
+                errors.append(f"scene '{sid}': unknown visual.component '{comp}'")
 
         if sc.get("source") and sc["source"] not in source_ids:
             errors.append(f"scene '{sid}': source '{sc['source']}' not in sources[]")

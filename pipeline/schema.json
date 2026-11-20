@@ -68,7 +68,7 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "type", "narration", "visual"],
+        "required": ["id", "type", "narration"],
         "properties": {
           "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
           "type": {
