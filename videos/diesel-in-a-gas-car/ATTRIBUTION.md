@@ -54,6 +54,34 @@ credited in the YouTube description; CC0/PD (03, 04) carry a courtesy credit.
 | `mont-door-3.jpg` | Fuel cap | Kevin M Klerks | CC BY 2.0 | commons.wikimedia.org/wiki/File:Fuel_cap_(51996441948).jpg |
 | `mont-door-4.jpg` | Open filler neck with cap | Nenad Stojkovic | CC BY 2.0 | commons.wikimedia.org/wiki/File:Open_Fuel_Tank_on_Vintage_Car_(54583225412).jpg |
 | `mont-door-5.jpg` | Fuel filler on a car body | Greg Gjerdingen | CC BY 2.0 | commons.wikimedia.org/wiki/File:1956_Chevrolet_Bel_Air_Fuel_Filler.jpg |
+| `mont-pump-7.jpg` | Hand holding pump nozzle | Nenad Stojkovic | CC BY 2.0 | commons.wikimedia.org |
+| `mont-pump-8.jpg` | Green nozzle, sun flare | Nenad Stojkovic | CC BY 2.0 | commons.wikimedia.org |
+| `mont-pump-9.jpg` | Chevron forecourt at night | Rafael Castillo | CC BY 2.0 | commons.wikimedia.org |
+| `mont-pump-10.jpg` | Fuel dispenser (NPC) | Saimmx | CC0 | commons.wikimedia.org |
+| `mont-pump-11.jpg` | Coloured nozzles, grade labels | Saimmx | CC0 | commons.wikimedia.org |
+| `mont-pump-12.jpg` | Forecourt dispenser island | Caryle Barton | CC0 | commons.wikimedia.org |
+| `mont-pump-13.jpg` | Vintage Ford petrol pump | Alf van Beem | CC0 | commons.wikimedia.org |
+| `mont-pump-14.jpg` | Chevron forecourt pumps | G. Edward Johnson | CC BY 4.0 | commons.wikimedia.org |
+| `mont-tow-7.jpg` | Car loaded on flatbed in garage | Shixart1985 | CC BY 2.0 | commons.wikimedia.org |
+| `mont-tow-8.jpg` | Flatbed carrying wrapped car | JustAnotherCarDesigner | CC0 | commons.wikimedia.org |
+| `mont-tow-9.jpg` | MAN flatbed tow truck | Retired electrician | CC0 | commons.wikimedia.org |
+| `mont-tow-10.jpg` | Fuso Canter recovery truck | Spielvogel | CC0 | commons.wikimedia.org |
+| `mont-tow-11.jpg` | Flatbed carrying a sports car | Rene | CC BY 3.0 | commons.wikimedia.org |
+| `mont-tow-12.jpg` | Car in a repair shop, open hood | Nenad Stojkovic | CC BY 2.0 | commons.wikimedia.org |
+| `mont-tow-13.jpg` | Repair garage with tow truck | Mattinbgn | CC BY 3.0 | commons.wikimedia.org |
+| `mont-tow-14.jpg` | Engine-bay inspection | Shixart1985 | CC BY 2.0 | commons.wikimedia.org |
+| `mont-inj-7.jpg` | Kugelfischer injection pump | M. Brinker | Public Domain | commons.wikimedia.org |
+| `mont-inj-8.jpg` | Kugelfischer pump cutaway | Buschtrommler | Public Domain | commons.wikimedia.org |
+| `mont-inj-9.jpg` | Bosch inline injection pump | Wikimedia contributor | Public Domain | commons.wikimedia.org |
+| `mont-inj-10.jpg` | Fuel rail with injectors | CZmarlin | Public Domain | commons.wikimedia.org |
+| `mont-inj-11.jpg` | Common-rail system schematic | AndiF | Public Domain | commons.wikimedia.org |
+| `mont-door-6.jpg` | Open chrome filler door | Greg Gjerdingen | CC BY 2.0 | commons.wikimedia.org |
+| `mont-door-7.jpg` | "FUEL" cap (Dodge Challenger) | dodge challenger1 | CC BY 2.0 | commons.wikimedia.org |
+| `mont-door-8.jpg` | Billet fuel cap close-up | Brian Snelson | CC BY 2.0 | commons.wikimedia.org |
+| `mont-door-9.jpg` | Filler neck, "tighten to click" | CZmarlin | Public Domain | commons.wikimedia.org |
+| `mont-door-10.jpg` | "American Ethanol" filler | Broadbandito | CC BY 2.0 | commons.wikimedia.org |
+| `mont-door-11.jpg` | "DIESEL fill" sign | Artaxerxes | CC BY 4.0 | commons.wikimedia.org |
+| `mont-door-12.jpg` | Hand holding cap at filler | Shixart1985 | CC BY 2.0 | commons.wikimedia.org |
 
 ## Cited data sources (shown on a SourceCard)
 

@@ -65,8 +65,7 @@
           "kicker": "It happens every day",
           "headline": "One every few minutes",
           "accent": "power",
-          "cut": 8,
-          "images": ["diesel/mont-pump-1.jpg", "diesel/mont-pump-4.jpg", "diesel/mont-pump-2.jpg", "diesel/mont-pump-6.jpg", "diesel/mont-pump-3.jpg", "diesel/01-nozzle.jpg", "diesel/mont-pump-5.jpg"],
+          "images": ["diesel/mont-pump-9.jpg", "diesel/mont-pump-2.jpg", "diesel/mont-pump-12.jpg", "diesel/mont-pump-4.jpg", "diesel/mont-pump-11.jpg", "diesel/mont-pump-7.jpg", "diesel/mont-pump-14.jpg", "diesel/mont-pump-3.jpg", "diesel/mont-pump-8.jpg", "diesel/mont-pump-10.jpg", "diesel/mont-pump-13.jpg", "diesel/mont-pump-6.jpg", "diesel/mont-pump-5.jpg", "diesel/01-nozzle.jpg"],
           "stat": {"to": 150000, "accent": "power", "label": "UK misfuels / year"},
           "peep": {"seed": "shocked-pump-3", "x": 1480, "y": 470, "size": 380, "delay": 12}
         }
@@ -226,8 +225,7 @@
           "kicker": "The one rule",
           "headline": "Don't turn the key",
           "accent": "power",
-          "cut": 8,
-          "images": ["diesel/mont-tow-1.jpg", "diesel/04-tow.jpg", "diesel/mont-tow-4.jpg", "diesel/mont-tow-2.jpg", "diesel/mont-tow-6.jpg", "diesel/mont-tow-3.jpg", "diesel/mont-tow-5.jpg"],
+          "images": ["diesel/mont-tow-1.jpg", "diesel/mont-tow-8.jpg", "diesel/mont-tow-11.jpg", "diesel/mont-tow-3.jpg", "diesel/mont-tow-9.jpg", "diesel/mont-tow-7.jpg", "diesel/mont-tow-10.jpg", "diesel/mont-tow-2.jpg", "diesel/mont-tow-13.jpg", "diesel/mont-tow-12.jpg", "diesel/mont-tow-4.jpg", "diesel/mont-tow-5.jpg", "diesel/mont-tow-6.jpg", "diesel/mont-tow-14.jpg", "diesel/04-tow.jpg"],
           "peep": {"seed": "worried-tow-5", "x": 1480, "y": 470, "size": 380, "delay": 12}
         }
       }
@@ -279,8 +277,7 @@
           "kicker": "Petrol in a diesel",
           "headline": "It eats the pump",
           "accent": "fault",
-          "cut": 8,
-          "images": ["diesel/mont-inj-1.jpg", "diesel/03-injectors.jpg", "diesel/mont-inj-3.jpg", "diesel/mont-inj-5.jpg", "diesel/mont-inj-2.jpg", "diesel/mont-inj-4.jpg", "diesel/mont-inj-6.jpg"],
+          "images": ["diesel/mont-inj-1.jpg", "diesel/mont-inj-7.jpg", "diesel/mont-inj-3.jpg", "diesel/mont-inj-10.jpg", "diesel/mont-inj-8.jpg", "diesel/mont-inj-2.jpg", "diesel/mont-inj-9.jpg", "diesel/mont-inj-4.jpg", "diesel/mont-inj-5.jpg", "diesel/mont-inj-11.jpg", "diesel/mont-inj-6.jpg", "diesel/03-injectors.jpg"],
           "stat": {"to": 8000, "prefix": "$", "accent": "fault", "label": "typical repair"},
           "peep": {"seed": "shocked-rev-8", "x": 1480, "y": 470, "size": 380, "delay": 12}
         }
@@ -298,8 +295,7 @@
           "kicker": "How to never do it",
           "headline": "Read the door",
           "accent": "ok",
-          "cut": 8,
-          "images": ["diesel/mont-door-1.jpg", "diesel/02-fuel-door.jpg", "diesel/mont-door-2.jpg", "diesel/mont-door-5.jpg", "diesel/mont-pump-5.jpg", "diesel/mont-door-4.jpg", "diesel/mont-door-3.jpg"],
+          "images": ["diesel/mont-door-1.jpg", "diesel/mont-door-6.jpg", "diesel/mont-door-9.jpg", "diesel/mont-door-2.jpg", "diesel/mont-door-12.jpg", "diesel/mont-door-7.jpg", "diesel/mont-door-4.jpg", "diesel/mont-door-10.jpg", "diesel/mont-door-8.jpg", "diesel/mont-door-11.jpg", "diesel/mont-door-3.jpg", "diesel/mont-door-5.jpg", "diesel/mont-pump-5.jpg", "diesel/02-fuel-door.jpg"],
           "peep": {"seed": "relieved-door-2", "x": 1480, "y": 470, "size": 380, "delay": 12}
         }
       }
