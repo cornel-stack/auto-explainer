@@ -23,7 +23,7 @@ interface VarConfig {
   face: string;
   lines: Line[];
   badge: {text: string; sub?: string; color: string};
-  photo: string;
+  photo?: string;
   check?: boolean;
 }
 
@@ -97,6 +97,37 @@ const TOPICS: Record<string, Record<Variant, VarConfig>> = {
       photo: 'diesel/03-injectors.jpg',
     },
   },
+  'how-automatic-transmission-works': {
+    a: {
+      seed: 'gear-awe-5',
+      face: 'awe',
+      lines: [
+        {text: 'HOW YOUR', color: CINEMA.ink, size: 118},
+        {text: 'GEARBOX', color: CINEMA.ink, size: 150},
+        {text: 'SHIFTS', color: CINEMA.cyan, size: 200},
+      ],
+      badge: {text: 'NO CLUTCH', sub: 'PEDAL?!', color: CINEMA.cyan},
+    },
+    b: {
+      seed: 'gear-shock-9',
+      face: 'concernedFear',
+      lines: [
+        {text: '6 GEARS', color: CINEMA.ink},
+        {text: '0 PEDALS', color: CINEMA.premium, size: 200},
+      ],
+      badge: {text: 'HOW?!', color: CINEMA.premium},
+    },
+    c: {
+      seed: 'gear-fear-2',
+      face: 'fear',
+      lines: [
+        {text: "IT'S SMARTER", color: CINEMA.ink, size: 104},
+        {text: 'THAN YOU', color: CINEMA.ink, size: 120},
+        {text: 'THINK', color: CINEMA.cyan, size: 210},
+      ],
+      badge: {text: 'AUTO', sub: 'transmission', color: CINEMA.violet},
+    },
+  },
 };
 
 export const THUMBNAIL_TOPICS = Object.keys(TOPICS);
@@ -128,24 +159,26 @@ export const Thumbnail: React.FC<{topic?: string; variant?: Variant}> = ({
         <rect width={1280} height={720} fill="url(#tg)" />
       </svg>
 
-      {/* Context photo inset */}
-      <div
-        style={{
-          position: 'absolute',
-          left: 54,
-          bottom: 48,
-          width: 340,
-          height: 220,
-          borderRadius: 18,
-          overflow: 'hidden',
-          border: `3px solid ${cfg.badge.color}`,
-          boxShadow: `0 0 40px ${cfg.badge.color}55`,
-          transform: 'rotate(-3deg)',
-        }}
-      >
-        <Img src={staticFile(cfg.photo)} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-        <AbsoluteFill style={{background: `linear-gradient(180deg, transparent 40%, ${CINEMA.bg0}cc 100%)`}} />
-      </div>
+      {/* Context photo inset (optional) */}
+      {cfg.photo ? (
+        <div
+          style={{
+            position: 'absolute',
+            left: 54,
+            bottom: 48,
+            width: 340,
+            height: 220,
+            borderRadius: 18,
+            overflow: 'hidden',
+            border: `3px solid ${cfg.badge.color}`,
+            boxShadow: `0 0 40px ${cfg.badge.color}55`,
+            transform: 'rotate(-3deg)',
+          }}
+        >
+          <Img src={staticFile(cfg.photo)} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+          <AbsoluteFill style={{background: `linear-gradient(180deg, transparent 40%, ${CINEMA.bg0}cc 100%)`}} />
+        </div>
+      ) : null}
 
       {/* Shocked Open Peep */}
       <div

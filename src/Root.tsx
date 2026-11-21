@@ -14,6 +14,7 @@ import premiumScript from '../videos/premium-vs-regular-gas/script.json';
 import dieselScript from '../videos/diesel-in-a-gas-car/script.json';
 import dieselProofScript from '../videos/diesel-choreo-proof/script.json';
 import diesel3dProofScript from '../videos/diesel-3d-proof/script.json';
+import transmissionScript from '../videos/how-automatic-transmission-works/script.json';
 
 // One series builder per `series` value (Spec §7). Each takes {script, timing}
 // and exposes a matching total-frame estimator for the composition length.
@@ -24,12 +25,17 @@ const BUILDERS: Record<
     frames: (s: Script, t: Timing | null, fps: number) => number;
   }
 > = {
-  'how-it-works': {component: HowItWorks, frames: howItWorksFrames},
+  'how-it-works': {component: Cinematic, frames: cinematicFrames},
   versus: {component: Cinematic, frames: cinematicFrames},
   'what-happens-if': {component: Cinematic, frames: cinematicFrames},
-  // Remaining series share the generic builders until their own land.
-  'every-x': {component: HowItWorks, frames: howItWorksFrames},
   'why-does-my-car': {component: Cinematic, frames: cinematicFrames},
+  'every-x': {component: HowItWorks, frames: howItWorksFrames},
+};
+
+// Per-slug overrides: the original engine video predates the 3D cinematic look
+// and uses the mechanism-scene builder.
+const SLUG_BUILDER: Record<string, (typeof BUILDERS)[Series]> = {
+  'how-a-car-engine-works': {component: HowItWorks, frames: howItWorksFrames},
 };
 
 // Every videos/*/script.json registered here becomes a Composition whose id is
@@ -42,13 +48,14 @@ const SCRIPTS: Script[] = [
   dieselScript as unknown as Script,
   dieselProofScript as unknown as Script,
   diesel3dProofScript as unknown as Script,
+  transmissionScript as unknown as Script,
 ];
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
       {SCRIPTS.map((script) => {
-        const builder = BUILDERS[script.series];
+        const builder = SLUG_BUILDER[script.slug] ?? BUILDERS[script.series];
         const Comp = builder.component;
         return (
           <Composition

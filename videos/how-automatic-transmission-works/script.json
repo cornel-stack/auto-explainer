@@ -1,0 +1,207 @@
+{
+  "slug": "how-automatic-transmission-works",
+  "series": "how-it-works",
+  "title": "How an Automatic Transmission Works (It's Smarter Than You Think)",
+  "alt_titles": [
+    "Automatic Transmission Explained: Planetary Gears, Clutches & Ratios",
+    "How Does an Automatic Gearbox Actually Shift?"
+  ],
+  "keyword": "how does an automatic transmission work",
+  "target_minutes": 10,
+  "tier": 2,
+  "theme": "dark",
+  "thumbnail": {"mode": "hero", "headline": "AUTOMATIC TRANSMISSION", "accent": "bar"},
+  "sources": [
+    {
+      "id": "hsw",
+      "title": "HowStuffWorks — How Automatic Transmissions Work",
+      "url": "https://auto.howstuffworks.com/automatic-transmission.htm"
+    },
+    {
+      "id": "fueleconomy",
+      "title": "fueleconomy.gov (U.S. DOE / EPA) — Driving & gearing efficiency",
+      "url": "https://www.fueleconomy.gov/feg/"
+    }
+  ],
+  "lexicon": {},
+  "intro": {
+    "narration": "There is no clutch pedal, and you never shift a single gear yourself. Yet somehow your automatic always picks exactly the right one, smoothly, thousands of times a trip. Here is how it actually works, and it is far smarter than you think."
+  },
+  "scenes": [
+    {
+      "id": "t-why",
+      "type": "title",
+      "narration": "Before the gears, one question: why does a car need gears at all?",
+      "visual": {
+        "component": "World3D",
+        "props": {"content": "title", "kicker": "The problem", "headline": "Why gears at all?", "icon": "question", "accent": "cyan", "peep": {"seed": "curious-driver-7", "x": 150, "y": 540, "size": 360, "delay": 10, "flip": true}}
+      }
+    },
+    {
+      "id": "ratios",
+      "type": "beat",
+      "source": "fueleconomy",
+      "narration": "An engine is surprisingly fussy. It only makes real power in a fairly narrow band of speed, and it has almost no muscle at all from a dead standstill. To get a heavy car moving from rest, you have to multiply its force enormously. But once you are rolling, you need the opposite: you want to trade that force back for speed, so the engine is not screaming its head off at every red light. That trade, force for speed, is exactly what gears do. A low gear gives you big force but low speed, perfect for heaving the car away from a stop or crawling up a steep hill. A high gear gives you lots of speed but little force, perfect for relaxed, efficient motorway cruising. An automatic transmission's entire job is to pick the right trade for the moment, continuously, and to do it without you ever thinking about it or touching a thing. The only real question is how it manages to change that trade so smoothly, with no clutch pedal and no lever for you to move.",
+      "visual": {
+        "component": "World3D",
+        "props": {
+          "content": "bars",
+          "kicker": "Force vs. speed",
+          "max": 10,
+          "bars": [
+            {"value": 9, "note": "max force", "label": "Low gear", "color": "power"},
+            {"value": 5.5, "note": "balance", "label": "Mid gear", "color": "premium"},
+            {"value": 9, "note": "max speed", "label": "Top gear", "color": "ok"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "t-planetary",
+      "type": "title",
+      "narration": "The answer is one beautiful, slightly mind-bending mechanism.",
+      "visual": {
+        "component": "World3D",
+        "props": {"content": "title", "kicker": "The heart of it", "headline": "The planetary gearset", "icon": "default", "accent": "cyan", "peep": {"seed": "thinking-driver-3", "x": 1440, "y": 540, "size": 350, "delay": 10}}
+      }
+    },
+    {
+      "id": "planetary-intro",
+      "type": "beat",
+      "source": "hsw",
+      "narration": "This is a planetary gearset, and almost every automatic ever built is made from a stack of them. The name comes from how it looks, like a little solar system. It has three members. In the very middle sits the sun gear, shown here in blue. Around it, three small planet gears mesh with the sun and ride on a green frame called the carrier, which is the part that holds them in orbit. And wrapping around the whole thing is the ring gear, in red, a large gear with its teeth facing inward. The planets are trapped between the sun on the inside and the ring on the outside. Now here is the trick that makes this so clever, and it is the single idea the whole video rests on: any one of these three members can be the input you drive, any one can be the output you take power from, and any one can be held perfectly still. Which member you hold, and which you drive, completely changes what comes out. So let us hold each one in turn and watch what happens.",
+      "visual": {
+        "component": "World3D",
+        "props": {"content": "planetary", "kicker": "Three members", "accent": "cyan", "sunW": 1.6, "carrierW": 0.95, "ringW": 0.5, "held": "none"}
+      }
+    },
+    {
+      "id": "cases",
+      "type": "beat",
+      "source": "hsw",
+      "narration": "Here is the magic. Hold the ring gear still, and spin the sun. The planets are forced to crawl around the inside of the fixed ring, dragging the carrier slowly with them. The carrier now turns much slower than the sun, but with far more force. That is gear reduction, your powerful low gears. Now free the ring, hold the sun instead, and drive the carrier: the ring races ahead, turning faster than your input. That is overdrive, your fuel-saving top gears. Lock any two members together, and the whole set spins as one solid lump at input speed. That is direct drive, exactly one to one. And if you hold the carrier and spin the sun, the ring is forced to turn backwards. That, with no extra parts at all, is reverse. One gearset, four completely different behaviours.",
+      "visual": {
+        "component": "World3D",
+        "props": {
+          "content": "planetary",
+          "kicker": "One set, four behaviours",
+          "accent": "premium",
+          "steps": [
+            {"cue": "Hold the ring gear still", "at": 0.08, "held": "ring", "sunW": 2.3, "carrierW": 0.7, "ringW": 0, "label": "Hold ring → reduction"},
+            {"cue": "hold the sun instead", "at": 0.4, "held": "sun", "sunW": 0, "carrierW": 1.1, "ringW": 1.8, "label": "Hold sun → overdrive"},
+            {"cue": "Lock any two members", "at": 0.62, "held": "none", "sunW": 1.4, "carrierW": 1.4, "ringW": 1.4, "label": "Lock two → 1 : 1 direct"},
+            {"cue": "hold the carrier and spin the sun", "at": 0.82, "held": "carrier", "sunW": 1.9, "carrierW": 0, "ringW": -1.3, "label": "Hold carrier → reverse"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "t-clutch",
+      "type": "title",
+      "narration": "Which raises the obvious question: what does the holding?",
+      "visual": {
+        "component": "World3D",
+        "props": {"content": "title", "kicker": "The muscle", "headline": "Clutches & brakes", "icon": "default", "accent": "electric", "peep": {"seed": "interested-driver-5", "x": 150, "y": 540, "size": 360, "delay": 10, "flip": true}}
+      }
+    },
+    {
+      "id": "clutch",
+      "type": "beat",
+      "source": "hsw",
+      "narration": "So how does the transmission hold a gear member still, or lock two together, with no pedal for you to press? It uses clutch packs: stacks of thin steel plates interleaved with friction discs, sitting inside an oil-filled drum. Normally they spin freely, with a whisper of a gap between them. But send pressurised transmission fluid in behind a piston, and the piston squeezes the whole stack tightly together. Friction grabs the plates and locks them as one, connecting or holding a gear member instantly and smoothly. The transmission's computer simply decides which clutches to pressurise for each gear, and the shift happens in a fraction of a second. No driver input, no jerk, just fluid pressure choosing gears for you.",
+      "visual": {
+        "component": "World3D",
+        "props": {
+          "content": "clutch",
+          "kicker": "The clutch pack",
+          "accent": "electric",
+          "steps": [
+            {"cue": "spin freely", "at": 0.25, "reach": 0.0},
+            {"cue": "squeezes the whole stack", "at": 0.58, "reach": 1.0},
+            {"cue": "fraction of a second", "at": 0.85, "reach": 1.0}
+          ]
+        }
+      }
+    },
+    {
+      "id": "brake-oneway",
+      "type": "beat",
+      "source": "hsw",
+      "narration": "There are really two flavours of this. A brake clamps a member to the stationary housing, pinning it still, and that is what creates a held reaction member. A clutch instead locks two rotating parts together so they turn as one. And a clever third device, a one-way clutch, lets a member freewheel in one direction but grip hard in the other, which smooths the handover between gears. Between the brakes, the clutches, and the one-way clutches, the gearbox can choose exactly which member is held and which is driven, and swap from one ratio to the next without ever fully cutting power to the wheels. That seamlessness is the whole point of an automatic.",
+      "visual": {
+        "component": "World3D",
+        "props": {
+          "content": "clutch",
+          "kicker": "Brake vs. clutch",
+          "accent": "cyan",
+          "steps": [
+            {"cue": "clamps a member", "at": 0.15, "reach": 1.0},
+            {"cue": "freewheel in one direction", "at": 0.55, "reach": 0.4},
+            {"cue": "cutting power to the wheels", "at": 0.85, "reach": 0.9}
+          ]
+        }
+      }
+    },
+    {
+      "id": "case-low",
+      "type": "beat",
+      "source": "hsw",
+      "narration": "Now let us put it together into a real six-speed gearbox. It stacks several planetary sets side by side and adds a handful of clutches, and for every gear it simply chooses which members to hold and which to drive. First gear holds the most and gives the biggest reduction, around three to one, a huge multiplication of force to heave the car off the line from a standstill. Then you shift up, and a clutch quietly releases one member while another one is grabbed, giving you second gear, at about one point eight to one. Shift again and you reach third, around one point four to one. Watch what is happening to the number: the reduction is shrinking at every single step. The gearbox is steadily trading away force in exchange for speed as you gather pace, which is exactly the trade we started the video with, now happening entirely on its own.",
+      "visual": {
+        "component": "World3D",
+        "props": {
+          "content": "planetary",
+          "kicker": "The power path",
+          "accent": "premium",
+          "steps": [
+            {"cue": "First gear holds the most", "at": 0.12, "held": "ring", "sunW": 2.4, "carrierW": 0.8, "ringW": 0, "label": "1st · 3.1 : 1"},
+            {"cue": "second gear", "at": 0.52, "held": "ring", "sunW": 2.0, "carrierW": 1.15, "ringW": 0, "label": "2nd · 1.8 : 1"},
+            {"cue": "third", "at": 0.78, "held": "sun", "sunW": 0, "carrierW": 1.4, "ringW": 1.0, "label": "3rd · 1.4 : 1"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "case-high",
+      "type": "beat",
+      "source": "hsw",
+      "narration": "By fourth gear, two members simply lock together and you reach direct drive, exactly one to one, with the engine and the wheels now turning in perfect lockstep. Fifth and sixth gears are overdrives, around zero point seven to one, and here something surprising happens: the output actually spins faster than the engine itself. That lets the engine drop its revs and loaf quietly along, which is what saves you so much fuel on a long motorway run. And reverse, remarkably, needs no special gear at all. The transmission just holds the carrier instead, around four and a half to one, and the output is forced to spin backwards. So that is six forward ratios and a reverse, all conjured out of a few planetary sets and some clutches. And the beautiful part is that at no point does anything fully disengage the way a manual clutch has to between shifts. The power simply keeps flowing to the wheels the entire time.",
+      "visual": {
+        "component": "World3D",
+        "props": {
+          "content": "planetary",
+          "kicker": "Overdrive & reverse",
+          "accent": "ok",
+          "steps": [
+            {"cue": "fourth gear", "at": 0.1, "held": "none", "sunW": 1.4, "carrierW": 1.4, "ringW": 1.4, "label": "4th · 1 : 1 direct"},
+            {"cue": "Fifth and sixth are overdrives", "at": 0.42, "held": "sun", "sunW": 0, "carrierW": 1.0, "ringW": 1.8, "label": "6th · 0.71 : 1"},
+            {"cue": "holds the carrier", "at": 0.74, "held": "carrier", "sunW": 1.9, "carrierW": 0, "ringW": -1.3, "label": "Reverse · 4.5 : 1"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "what-you-feel",
+      "type": "title",
+      "narration": "So what do you actually feel from the driver's seat? When you floor it to overtake, the computer drops down a gear or two, a kickdown, diving into a lower ratio for maximum force, and you feel that surge push you back. The rest of the time, a good automatic blends every shift so smoothly you barely notice the ratios changing beneath you. And the one thing keeping this entire ballet alive is the transmission fluid, doing the pressing, the cooling, and the lubricating all at once. Which is exactly why neglecting it is the fastest way to kill a gearbox.",
+      "visual": {
+        "component": "World3D",
+        "props": {"content": "title", "kicker": "What you feel", "headline": "Smooth, every time", "icon": "check", "accent": "ok", "peep": {"seed": "happy-driver-2", "x": 1440, "y": 540, "size": 360, "delay": 10}}
+      }
+    },
+    {
+      "id": "recap",
+      "type": "beat",
+      "source": "hsw",
+      "narration": "So let us put the whole thing together one last time. You have a set of planetary gears that can give you reduction, direct drive, or overdrive, depending purely and simply on which member you choose to hold. You have clutches and brakes to grab that member using nothing but pressurised fluid, with no mechanical linkage to the driver at all. And you have a computer sitting on top, reading your speed and your throttle and orchestrating the entire dance, gear after gear, shift after shift, thousands of times on every journey. No clutch pedal, no lever you ever move yourself, just the right ratio, chosen and delivered at exactly the right instant, every single time. That is an automatic transmission, and once you can see the planetary set turning in your mind, it really is far smarter than you ever thought.",
+      "visual": {
+        "component": "World3D",
+        "props": {"content": "planetary", "kicker": "All together", "accent": "cyan", "sunW": 2.6, "carrierW": 2.6, "ringW": 2.6, "held": "none"}
+      }
+    }
+  ],
+  "outro": {
+    "narration": "That is the automatic transmission: planetary gears, clutches, and fluid, working together so you never have to think about shifting. The next time your car glides from gear to gear, you will know exactly what just happened under the floor. If this made it click, subscribe and hit the bell for the rest of the series. Next time: the transmission fluid that makes all of this possible, and what really happens when you never change it.",
+    "next_slug": "automatic-transmission-fluid"
+  }
+}

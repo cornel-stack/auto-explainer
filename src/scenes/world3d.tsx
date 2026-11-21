@@ -2,6 +2,7 @@ import React from 'react';
 import {AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {World3D, Pipeline3D, PIPE_NODES, nodeWorld, type Cam} from '../three/World3D';
 import {Compare3D, Bars3D, IconFloat3D, Timeline3D, COMPARE_POS, BAR_X, BAR_BASE_Y, tlX, TL_Y, acc} from '../three/content3d';
+import {Planetary3D, Clutch3D, planetaryAnchor} from '../three/gearset3d';
 import {projectToScreen} from '../components/Engine3D/geometry';
 import {resolveChoreo, _lerp, type ChoreoStep} from '../lib/choreo';
 import {CINEMA, textGlow} from '../theme/cinema';
@@ -204,6 +205,39 @@ export const WorldScene: React.FC<Props> = ({scene, beat, source, globalStart, t
       );
     }
     if (o.credit) overlays.push(<div key="cr" style={{position: 'absolute', left: left + 12, top: top + h - 34, fontFamily: FONT_MONO, fontSize: 15, color: '#FFFFFFAA', background: 'rgba(0,0,0,0.4)', padding: '3px 8px', borderRadius: 6}}>{o.credit}</div>);
+  } else if (content === 'planetary') {
+    // The planetary gearset. Gear speeds come from the active step (each gear
+    // case is a set of member velocities), else from top-level props.
+    const gp: any = r && o.steps && o.steps[r.idx] ? o.steps[r.idx] : o;
+    const a = -0.35 + te * 0.5;
+    cam = {pos: [Math.sin(a) * 4.6, 2.5, Math.cos(a) * 9.6 + 1.4], target: [0, 0, 0], fov: 42};
+    world = <Planetary3D sunW={gp.sunW} carrierW={gp.carrierW} ringW={gp.ringW} held={gp.held} />;
+    const mk = (member: string, text: string, color: string, heldNow: boolean) => {
+      const s = proj(planetaryAnchor(member), cam);
+      overlays.push(<Label key={member} x={s.x} y={s.y} text={heldNow ? text + ' · held' : text} color={heldNow ? CINEMA.ink3 : color} size={30} />);
+    };
+    mk('sun', 'Sun', CINEMA.fuel, gp.held === 'sun');
+    mk('carrier', 'Carrier', CINEMA.ok, gp.held === 'carrier');
+    mk('ring', 'Ring', CINEMA.power, gp.held === 'ring');
+    if (gp.label) {
+      const c = acc(o.accent ?? 'cyan');
+      overlays.push(
+        <div key="hud" style={{position: 'absolute', bottom: 150, left: 0, right: 0, textAlign: 'center', fontFamily: FONT_SANS, fontSize: 72, fontWeight: 800, letterSpacing: -2, color: c, textShadow: textGlow(c, 1.2)}}>{gp.label}</div>
+      );
+    }
+  } else if (content === 'clutch') {
+    const applied = r ? r.reach : te;
+    cam = {pos: [3.3, 1.7, 7.8 - te * 1.3], target: [0, 0.1, 0], fov: 40};
+    world = <Clutch3D applied={applied} />;
+    const lab = (w: [number, number, number], text: string, color: string) => {
+      const s = proj(w, cam);
+      overlays.push(<Label key={text} x={s.x} y={s.y} text={text} color={color} size={28} />);
+    };
+    lab([0.4, 1.75, 0.4], 'Friction discs', CINEMA.premium);
+    lab([-0.9, 1.75, 0.4], 'Steel plates', CINEMA.cyan);
+    lab([-2.4, -1.7, 0], 'Piston', CINEMA.electric);
+    const c = applied > 0.5 ? CINEMA.ok : CINEMA.ink3;
+    overlays.push(<div key="st" style={{position: 'absolute', bottom: 150, left: 0, right: 0, textAlign: 'center', fontFamily: FONT_SANS, fontSize: 60, fontWeight: 800, color: c, textShadow: textGlow(c, 1)}}>{applied > 0.5 ? 'APPLIED' : 'RELEASED'}</div>);
   } else {
     // title
     cam = {pos: [_lerp(-2, 1.5, te) * 0.6, _lerp(4.2, 3.2, te), _lerp(20, 12.5, te)], target: [0, 2.6, 0], fov: 42};
