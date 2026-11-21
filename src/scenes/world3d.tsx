@@ -6,8 +6,24 @@ import {projectToScreen} from '../components/Engine3D/geometry';
 import {resolveChoreo, _lerp, type ChoreoStep} from '../lib/choreo';
 import {CINEMA, textGlow} from '../theme/cinema';
 import {FONT_SANS, FONT_MONO} from '../theme/fonts';
-import {SectionKicker, CountUp} from '../theme/kinetic';
+import {SectionKicker, CountUp, KineticHeadline} from '../theme/kinetic';
+import {Montage} from '../components/Montage/Montage';
+import {Peep} from '../components/Peep/Peep';
 import type {Scene, Source, TimedBeat} from '../lib/schema';
+
+const ProgressBar: React.FC<{progress: number}> = ({progress}) => (
+  <div style={{position: 'absolute', left: 0, bottom: 0, width: 1920, height: 4, background: '#FFFFFF10'}}>
+    <div style={{width: `${Math.max(0, Math.min(1, progress)) * 100}%`, height: '100%', background: `linear-gradient(90deg, ${CINEMA.fuel}, ${CINEMA.violet})`, boxShadow: `0 0 12px ${CINEMA.violet}`}} />
+  </div>
+);
+
+const SourceTag: React.FC<{source?: Source}> = ({source}) =>
+  source ? (
+    <div style={{position: 'absolute', right: 96, bottom: 56, textAlign: 'right', fontFamily: FONT_MONO}}>
+      <div style={{fontSize: 15, letterSpacing: 2, textTransform: 'uppercase', color: CINEMA.ink3}}>Source</div>
+      <div style={{fontSize: 20, color: CINEMA.ink2}}>{source.title}</div>
+    </div>
+  ) : null;
 
 const lp3 = (a: [number, number, number], b: [number, number, number], t: number): [number, number, number] => [
   _lerp(a[0], b[0], t),
@@ -41,6 +57,32 @@ export const WorldScene: React.FC<Props> = ({scene, beat, source, globalStart, t
   const t01 = clamp01(frame / beatFrames);
   const te = ease(t01);
   const r = steps.length ? resolveChoreo(frame, fps, beat, beatFrames, steps) : null;
+  const progress = (globalStart + frame) / totalFrames;
+
+  // Non-3D beat: a fast-cut full-screen image montage + a reacting character.
+  if (content === 'montage') {
+    const images: string[] = o.images ?? [];
+    const lastWord = o.headline ? String(o.headline).split(' ').slice(-1)[0] : undefined;
+    return (
+      <AbsoluteFill>
+        <Montage images={images} cut={o.cut ?? 9} />
+        {kicker ? <SectionKicker label={kicker} accent="cyan" /> : null}
+        <div style={{position: 'absolute', left: 96, bottom: 150, width: 1120, display: 'flex', flexDirection: 'column', gap: 18}}>
+          {o.headline ? <KineticHeadline text={o.headline} accent={o.accent ?? 'power'} accentWord={lastWord} size={72} /> : null}
+          {o.stat ? (
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+              <CountUp to={o.stat.to} prefix={o.stat.prefix} suffix={o.stat.suffix} decimals={o.stat.decimals ?? 0} accent={o.stat.accent ?? 'power'} size={100} />
+              {o.stat.label ? <span style={{fontFamily: FONT_MONO, fontSize: 22, letterSpacing: 2, textTransform: 'uppercase', color: CINEMA.ink3, marginTop: 4}}>{o.stat.label}</span> : null}
+            </div>
+          ) : null}
+        </div>
+        {o.peep ? <Peep {...(o.peep as any)} /> : null}
+        <div style={{position: 'absolute', right: 96, bottom: 104, fontFamily: FONT_MONO, fontSize: 15, color: CINEMA.ink3}}>Images — credits in description</div>
+        <SourceTag source={source} />
+        <ProgressBar progress={progress} />
+      </AbsoluteFill>
+    );
+  }
 
   const proj = (w: [number, number, number], cam: Cam) => projectToScreen(w, cam, width, height);
 
@@ -160,22 +202,14 @@ export const WorldScene: React.FC<Props> = ({scene, beat, source, globalStart, t
     if (o.lines && o.lines[0]) overlays.push(<Label key="s" x={s.x} y={s.y} text={o.lines[0]} color={CINEMA.ink2} size={30} shift={0} />);
   }
 
-  const progress = (globalStart + frame) / totalFrames;
-
   return (
     <AbsoluteFill>
       <World3D cam={cam}>{world}</World3D>
       {overlays}
+      {o.peep ? <Peep {...(o.peep as any)} /> : null}
       {kicker ? <SectionKicker label={kicker} accent="cyan" /> : null}
-      {source ? (
-        <div style={{position: 'absolute', right: 96, bottom: 56, textAlign: 'right', fontFamily: FONT_MONO}}>
-          <div style={{fontSize: 15, letterSpacing: 2, textTransform: 'uppercase', color: CINEMA.ink3}}>Source</div>
-          <div style={{fontSize: 20, color: CINEMA.ink2}}>{source.title}</div>
-        </div>
-      ) : null}
-      <div style={{position: 'absolute', left: 0, bottom: 0, width: 1920, height: 4, background: '#FFFFFF10'}}>
-        <div style={{width: `${Math.max(0, Math.min(1, progress)) * 100}%`, height: '100%', background: `linear-gradient(90deg, ${CINEMA.fuel}, ${CINEMA.violet})`, boxShadow: `0 0 12px ${CINEMA.violet}`}} />
-      </div>
+      <SourceTag source={source} />
+      <ProgressBar progress={progress} />
     </AbsoluteFill>
   );
 };
