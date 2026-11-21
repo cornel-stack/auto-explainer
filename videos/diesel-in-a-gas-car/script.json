@@ -61,13 +61,14 @@
       "visual": {
         "component": "World3D",
         "props": {
-          "content": "photo",
+          "content": "montage",
           "kicker": "It happens every day",
           "headline": "One every few minutes",
           "accent": "power",
-          "src": "diesel/01-nozzle.jpg",
-          "credit": "Calle Eklund/V-wolf · CC BY 3.0",
-          "stat": {"to": 150000, "accent": "power", "label": "UK misfuels / year"}
+          "cut": 8,
+          "images": ["diesel/mont-pump-1.jpg", "diesel/mont-pump-4.jpg", "diesel/mont-pump-2.jpg", "diesel/mont-pump-6.jpg", "diesel/mont-pump-3.jpg", "diesel/01-nozzle.jpg", "diesel/mont-pump-5.jpg"],
+          "stat": {"to": 150000, "accent": "power", "label": "UK misfuels / year"},
+          "peep": {"seed": "shocked-pump-3", "x": 1480, "y": 470, "size": 380, "delay": 12}
         }
       }
     },
@@ -221,12 +222,13 @@
       "visual": {
         "component": "World3D",
         "props": {
-          "content": "photo",
+          "content": "montage",
           "kicker": "The one rule",
           "headline": "Don't turn the key",
           "accent": "power",
-          "src": "diesel/04-tow.jpg",
-          "credit": "Jelson25 · Public Domain"
+          "cut": 8,
+          "images": ["diesel/mont-tow-1.jpg", "diesel/04-tow.jpg", "diesel/mont-tow-4.jpg", "diesel/mont-tow-2.jpg", "diesel/mont-tow-6.jpg", "diesel/mont-tow-3.jpg", "diesel/mont-tow-5.jpg"],
+          "peep": {"seed": "worried-tow-5", "x": 1480, "y": 470, "size": 380, "delay": 12}
         }
       }
     },
@@ -273,13 +275,14 @@
       "visual": {
         "component": "World3D",
         "props": {
-          "content": "photo",
+          "content": "montage",
           "kicker": "Petrol in a diesel",
           "headline": "It eats the pump",
           "accent": "fault",
-          "src": "diesel/03-injectors.jpg",
-          "credit": "Wikimedia · CC0",
-          "stat": {"to": 8000, "prefix": "$", "accent": "fault", "label": "typical repair"}
+          "cut": 8,
+          "images": ["diesel/mont-inj-1.jpg", "diesel/03-injectors.jpg", "diesel/mont-inj-3.jpg", "diesel/mont-inj-5.jpg", "diesel/mont-inj-2.jpg", "diesel/mont-inj-4.jpg", "diesel/mont-inj-6.jpg"],
+          "stat": {"to": 8000, "prefix": "$", "accent": "fault", "label": "typical repair"},
+          "peep": {"seed": "shocked-rev-8", "x": 1480, "y": 470, "size": 380, "delay": 12}
         }
       }
     },
@@ -291,12 +294,13 @@
       "visual": {
         "component": "World3D",
         "props": {
-          "content": "photo",
+          "content": "montage",
           "kicker": "How to never do it",
           "headline": "Read the door",
           "accent": "ok",
-          "src": "diesel/02-fuel-door.jpg",
-          "credit": "Nenad Stojkovic · CC BY 2.0"
+          "cut": 8,
+          "images": ["diesel/mont-door-1.jpg", "diesel/02-fuel-door.jpg", "diesel/mont-door-2.jpg", "diesel/mont-door-5.jpg", "diesel/mont-pump-5.jpg", "diesel/mont-door-4.jpg", "diesel/mont-door-3.jpg"],
+          "peep": {"seed": "relieved-door-2", "x": 1480, "y": 470, "size": 380, "delay": 12}
         }
       }
     }
