@@ -7,7 +7,7 @@ import {resolveChoreo, _lerp, type ChoreoStep} from '../lib/choreo';
 import {CINEMA, textGlow} from '../theme/cinema';
 import {FONT_SANS, FONT_MONO} from '../theme/fonts';
 import {SectionKicker, CountUp, KineticHeadline} from '../theme/kinetic';
-import {Montage} from '../components/Montage/Montage';
+import {Montage, montageCuts} from '../components/Montage/Montage';
 import {Peep} from '../components/Peep/Peep';
 import type {Scene, Source, TimedBeat} from '../lib/schema';
 
@@ -59,19 +59,31 @@ export const WorldScene: React.FC<Props> = ({scene, beat, source, globalStart, t
   const r = steps.length ? resolveChoreo(frame, fps, beat, beatFrames, steps) : null;
   const progress = (globalStart + frame) / totalFrames;
 
-  // Non-3D beat: a fast-cut full-screen image montage + a reacting character.
+  // Non-3D beat: an edited image montage (each image once, cuts on the words,
+  // held hero/stat tail) + a reacting character.
   if (content === 'montage') {
     const images: string[] = o.images ?? [];
     const lastWord = o.headline ? String(o.headline).split(' ').slice(-1)[0] : undefined;
+    const wordStarts = (beat?.words ?? []).map((w) => Math.round(w.s * fps));
+    // Adaptive pace: spread the unique images across the beat leaving a ~5s hero
+    // tail, clamped to an edited-B-roll pace (~1.0–2.2s per shot). `o.hold`
+    // (seconds) overrides.
+    const heroTail = Math.round(5 * fps);
+    const autoHold = Math.max(30, Math.min(66, Math.round((beatFrames - heroTail) / Math.max(1, images.length))));
+    const hold = o.hold ? Math.round(o.hold * fps) : autoHold;
+    const cuts = montageCuts(wordStarts, Math.max(1, images.length), hold);
+    const heroStart = cuts[cuts.length - 1] ?? 0;
+    const onHero = frame >= heroStart;
     return (
       <AbsoluteFill>
-        <Montage images={images} cut={o.cut ?? 9} />
+        <Montage images={images} wordStarts={wordStarts} hold={hold} beatFrames={beatFrames} />
         {kicker ? <SectionKicker label={kicker} accent="cyan" /> : null}
         <div style={{position: 'absolute', left: 96, bottom: 150, width: 1120, display: 'flex', flexDirection: 'column', gap: 18}}>
           {o.headline ? <KineticHeadline text={o.headline} accent={o.accent ?? 'power'} accentWord={lastWord} size={72} /> : null}
-          {o.stat ? (
+          {/* Stat lands on the held hero shot — the pay-off at the tail. */}
+          {o.stat && onHero ? (
             <div style={{display: 'flex', flexDirection: 'column'}}>
-              <CountUp to={o.stat.to} prefix={o.stat.prefix} suffix={o.stat.suffix} decimals={o.stat.decimals ?? 0} accent={o.stat.accent ?? 'power'} size={100} />
+              <CountUp to={o.stat.to} prefix={o.stat.prefix} suffix={o.stat.suffix} decimals={o.stat.decimals ?? 0} accent={o.stat.accent ?? 'power'} size={110} delay={heroStart} />
               {o.stat.label ? <span style={{fontFamily: FONT_MONO, fontSize: 22, letterSpacing: 2, textTransform: 'uppercase', color: CINEMA.ink3, marginTop: 4}}>{o.stat.label}</span> : null}
             </div>
           ) : null}
